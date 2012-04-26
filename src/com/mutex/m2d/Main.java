@@ -14,7 +14,10 @@ public class Main {
 	public static final String GAME_TITLE = "m2d";
 	public static final int FRAMERATE = 60;
 	public static boolean finished;
+	public static boolean ShowGrid;
 	public static World world;
+	public static final int DisplayWidth = 800;
+	public static final int DisplayHeight = 600;
 	
 	private Main() {}
 	private static Renderer r;
@@ -37,21 +40,22 @@ public class Main {
 	public static void init() throws Exception {
 		Display.setTitle(GAME_TITLE);
 		//Display.setFullscreen(true);
-		Display.setDisplayMode(new DisplayMode(800, 600));
+		Display.setDisplayMode(new DisplayMode(DisplayWidth, DisplayHeight));
+		
 		//Display.setResizable(true);
 		Display.setVSyncEnabled(true);
 		Display.create();
 		AL.create();
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
-		glOrtho(0.0, Display.getDisplayMode().getWidth(), 0.0, Display.getDisplayMode().getHeight(), -1.0, 1.0);
+		glOrtho(0.0, DisplayWidth, 0.0, DisplayHeight, -1.0, 1.0);
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
-		glViewport(0, 0, Display.getDisplayMode().getWidth(), Display.getDisplayMode().getHeight());
+		glViewport(0, 0, DisplayWidth, DisplayHeight);
 		glEnable(GL_TEXTURE_2D);
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		
+		ShowGrid = true;
 		world = new World();
 		r = new Renderer(world);
 		fr = new FontRenderer(r);
@@ -89,6 +93,8 @@ public class Main {
 	private static void logic() {
 		if (Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)) {
 			finished = true;
+		} else if (Keyboard.isKeyDown(Keyboard.KEY_G)) {
+			ShowGrid = !ShowGrid;
 		}
 	}
 	
@@ -97,9 +103,9 @@ public class Main {
 		glClear(GL_COLOR_BUFFER_BIT);
 		glPushMatrix();
 
-		glTranslatef(Display.getDisplayMode().getWidth() / 2, Display.getDisplayMode().getHeight() / 2, 0.0f);
+		glTranslatef(DisplayWidth / 2, DisplayHeight / 2, 0.0f);
 		r.renderMap();
-		r.drawGrid();
+		if (ShowGrid) r.drawGrid();
 		r.renderOverlay();
 		r.renderPlayer();
 		glPopMatrix();

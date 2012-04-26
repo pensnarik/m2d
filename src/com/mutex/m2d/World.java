@@ -1,12 +1,16 @@
 package com.mutex.m2d;
 
+import java.util.Random;
+
 public class World {
 	
 	public ChunkProvider chunkProvider;
 	public Player player;
+	public Random RandomGen;
 	
 	World()
 	{
+		RandomGen = new Random(1);
 		chunkProvider = new ChunkProvider(this);
 		int hash = chunkProvider.chunkCoordsToHash(2, 2);
 		System.out.println("hash = " + hash);

@@ -2,8 +2,6 @@ package com.mutex.m2d;
 
 import java.io.*;
 
-//import com.mutex.m2d.Chunk;
-
 public class ChunkProvider
 {
 	public World world;
@@ -25,7 +23,8 @@ public class ChunkProvider
 			chunk = new Chunk(world, x_, y_);
 			for (int i = 0; i < Chunk.width * Chunk.height; i++)
 			{
-				chunk.blocks[i] = new Block(0, i % Chunk.width, (i - (i % Chunk.width))/Chunk.width); 
+				int type = world.RandomGen.nextInt(2);
+				chunk.blocks[i] = new Block(type, x_ * Chunk.width + i % Chunk.width, y_ * Chunk.height + (i - (i % Chunk.width))/Chunk.width); 
 			}
 			loadedChunks.add(hash,  chunk);
 		}

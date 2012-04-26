@@ -10,6 +10,6 @@ public class Block {
 	{
 		x = x_; y = y_;
 		blockID = blockID_;
-		System.out.println("New block: " + x + ", " + y);
+		//System.out.println("New block: " + x + ", " + y);
 	}
 }

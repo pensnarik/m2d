@@ -2,26 +2,21 @@ package com.mutex.m2d;
 
 import org.newdawn.slick.opengl.Texture;
 import org.newdawn.slick.opengl.TextureLoader;
-import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.util.ResourceLoader;
 import org.lwjgl.opengl.Display;
-import org.lwjgl.opengl.GL11;
 import org.lwjgl.input.Mouse;
 
 import static org.lwjgl.opengl.GL11.*;
 
-import org.newdawn.slick.Color;
-import java.awt.Font;
-
 import java.io.IOException;
 
-@SuppressWarnings("deprecation")
-
 public class Renderer {
-	public Texture texDirt; 
+	public Texture texDirt;
+	public Texture texStone;
 	public Texture textPlayer;
 	public World world;
-	private TrueTypeFont font;
+	public final int scale = 2;
+	public final int blockSize = 16;
 	
 	public Renderer(World world_)
 	{
@@ -35,15 +30,14 @@ public class Renderer {
 	}
 	
 	public void loadFonts()
-	{
-		Font awtFont = new Font("Courier New", Font.BOLD, 42);		
-		font = new TrueTypeFont(awtFont, false);		
+	{	
 	}
 	
 	public void loadTextures()
 	{
 		try {
 			texDirt = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("./res/dirt.png"));
+			texStone = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("./res/stone.png"));
 			textPlayer = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("./res/player.png"));
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);			
@@ -84,7 +78,17 @@ public class Renderer {
 			Chunk chunk = (Chunk) world.chunkProvider.loadedChunks.getValueByIndex(i);
 			for (int j = 0; j < Chunk.height * Chunk.height; j++) {
 					Block b = chunk.blocks[j];
-					DrawTexturedBox(b.x*32 - 16, b.y*32 - 16, b.x*32 + 16, b.y*32 + 16, texDirt.getTextureID());
+					int x1 = getScreenCoordX(b.x) - blockSize / 2 * scale;
+					int x2 = getScreenCoordX(b.x) + blockSize / 2 * scale;
+					int y1 = getScreenCoordY(b.y) - blockSize / 2 * scale;
+					int y2 = getScreenCoordY(b.y) + blockSize / 2 * scale;
+					if (b.blockID == 0) {
+						DrawTexturedBox(x1, y1, x2, y2, texDirt.getTextureID());
+					} else if (b.blockID == 1) {
+						DrawTexturedBox(x1, y1, x2, y2, texStone.getTextureID());
+					} else {
+						continue;
+					}
 			}
 		}
 	}
@@ -145,5 +149,15 @@ public class Renderer {
 		Main.fr.renderString("" + x, -370, 270, 1);
 		Main.fr.renderString("" + y, -370, 260, 1);		
 		glPopMatrix();
+	}
+	
+	public int getScreenCoordX(double x_)
+	{
+		return (int) (x_ * scale * blockSize - world.player.x * scale * blockSize);
+	}
+	
+	public int getScreenCoordY(double y_)
+	{
+		return (int) (y_ * scale * blockSize - world.player.y * scale * blockSize);
 	}
 }
