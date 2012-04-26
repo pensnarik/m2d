@@ -95,6 +95,14 @@ public class Main {
 			finished = true;
 		} else if (Keyboard.isKeyDown(Keyboard.KEY_G)) {
 			ShowGrid = !ShowGrid;
+		} else if (Keyboard.isKeyDown(Keyboard.KEY_LEFT)) {
+			world.player.x -= 0.2;
+		} else if (Keyboard.isKeyDown(Keyboard.KEY_RIGHT)) {
+			world.player.x += 0.2;
+		} else if (Keyboard.isKeyDown(Keyboard.KEY_UP)) {
+			world.player.y += 0.2;
+		} else if (Keyboard.isKeyDown(Keyboard.KEY_DOWN)) {
+			world.player.y -= 0.2;
 		}
 	}
 	

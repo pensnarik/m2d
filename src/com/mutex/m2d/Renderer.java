@@ -67,8 +67,11 @@ public class Renderer {
 	{
 		double x = world.player.x;
 		double y = world.player.y;
-		
-		DrawTexturedBox(0, 0, 40, 40, textPlayer.getTextureID());
+		float x1 = (float) x - blockSize / 2 * scale;
+		float y1 = (float) y;
+		float x2 = (float)(x + blockSize * scale);
+		float y2 = (float)(y + blockSize * 2 * scale);
+		DrawTexturedBox(x1, y1, x2, y2, textPlayer.getTextureID());
 	}
 	
 	public void renderMap()
