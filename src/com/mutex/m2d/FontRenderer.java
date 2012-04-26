@@ -40,6 +40,10 @@ public class FontRenderer
 				pos = c - 0x30;
 			} else if (c == 0x2e) {
 				pos = 80;
+			} else if (c == 0x2d) { /* '-' */
+				pos = 81;
+			} else if (c == 0x2b) { /* '+' */
+				pos = 82;
 			} else {
 				pos = -1;
 			}

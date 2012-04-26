@@ -81,6 +81,8 @@ public class Renderer {
 			Chunk chunk = (Chunk) world.chunkProvider.loadedChunks.getValueByIndex(i);
 			for (int j = 0; j < Chunk.height * Chunk.height; j++) {
 					Block b = chunk.blocks[j];
+					if(b == null) continue;
+					if (!isBlockVisible(b)) continue;
 					int x1 = getScreenCoordX(b.x) - blockSize / 2 * scale;
 					int x2 = getScreenCoordX(b.x) + blockSize / 2 * scale;
 					int y1 = getScreenCoordY(b.y) - blockSize / 2 * scale;
@@ -150,7 +152,9 @@ public class Renderer {
 		int x = Mouse.getX();
 		int y = Mouse.getY();
 		Main.fr.renderString("" + x, -370, 270, 1);
-		Main.fr.renderString("" + y, -370, 260, 1);		
+		Main.fr.renderString("" + y, -370, 260, 1);
+		Main.fr.renderString("" + world.player.x, -370, 250, 1);
+		Main.fr.renderString("" + world.player.y, -370, 240, 1);		
 		glPopMatrix();
 	}
 	
@@ -162,5 +166,15 @@ public class Renderer {
 	public int getScreenCoordY(double y_)
 	{
 		return (int) (y_ * scale * blockSize - world.player.y * scale * blockSize);
+	}
+	
+	public boolean isBlockVisible(Block b)
+	{
+		int bx = getScreenCoordX(b.x);
+		int by = getScreenCoordY(b.y);
+		return  !(bx < - Main.DisplayWidth / 2 - blockSize * scale | 
+				  by < - Main.DisplayHeight / 2 - blockSize * scale | 
+				  bx > Main.DisplayWidth / 2 + blockSize * scale |
+				  by > Main.DisplayHeight / 2 + blockSize * scale);
 	}
 }
