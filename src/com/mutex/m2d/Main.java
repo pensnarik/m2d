@@ -14,7 +14,6 @@ public class Main {
 	public static final String GAME_TITLE = "m2d";
 	public static final int FRAMERATE = 60;
 	public static boolean finished;
-	public static float angle;
 	public static World world;
 	
 	private Main() {}
@@ -58,7 +57,6 @@ public class Main {
 		fr = new FontRenderer(r);
 		r.init();
 		r.loadTextures();
-		fr.renderString("0123456789", 100, 100, 2);
 	}
 	
 	private static void run() {

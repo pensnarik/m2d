@@ -15,9 +15,6 @@ public class ChunkProvider
 		loadedChunks = new HashMap();
 	}
 	
-	/*
-	 * Загружает из файла или генерирует чанк. Пока нет генератора карт, чанк генерируется прямо здесь.
-	 */
 	public Chunk provideChunk(int x_, int y_)
 	{
 		System.out.println("provideChunk(" + x_ + ", " + y_ + ")");

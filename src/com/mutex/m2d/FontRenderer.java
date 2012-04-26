@@ -11,8 +11,8 @@ public class FontRenderer
 {
 	private Texture textFont;
 	public Renderer renderer;
-	public static final int CharWidth = 7;
-	public static final int CharHeight = 7;
+	public static final int CharWidth = 8;
+	public static final int CharHeight = 8;
 	
 	public FontRenderer(Renderer renderer_)
 	{
@@ -31,22 +31,34 @@ public class FontRenderer
 	public void renderString(String s, int x, int y, int scale)
 	{
 		glPushMatrix();
-		renderer.drawPartOfTexture(x, y, x + CharWidth * scale, y - CharWidth * scale, 0.0f, 0.0f, 1.0f/16, 1.0f/16, textFont.getTextureID());
+		int pos; int col; int row;
 		
 		for (int i = 0; i < s.length(); i++)
 		{
-			int pos = 0;
 			int c = (int) s.toLowerCase().charAt(i);
 			if (c >= 0x30 && c <= 0x39) {
 				pos = c - 0x30;
-				int x1 = 5 * pos;
-				int x2 = 5 * pos + 5;
-				int y1 = 0;
-				int y2 = 7;
-//				renderer.drawPartOfTexture(100, 200, 228, 100, 0.0f, 0.0f, 1.0f, 1.0f, textFont.getTextureID());
+			} else if (c == 0x2e) {
+				pos = 80;
 			} else {
-				return;
+				pos = -1;
 			}
+			if (pos < 0) continue;
+			col = pos % 16;
+			row = (int)(pos / 16);
+			float tx1 = (float)(col*(float)1.0f/16);
+			float tx2 = (float)((col + 1) *(float)1.0f/16);
+			float ty1 = (float)(row*(float)1.0f/16);
+			float ty2 = (float)((row + 1) *(float)1.0f/16);
+			renderer.drawPartOfTexture(x + CharWidth * scale * i,
+					   y,
+					   x + CharWidth * scale * (i + 1),
+					   y - CharHeight * scale,
+					   tx1,
+					   ty1,
+					   tx2,
+					   ty2,
+					   textFont.getTextureID());
 		}
 		
 		glPopMatrix();

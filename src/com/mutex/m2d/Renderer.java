@@ -5,6 +5,9 @@ import org.newdawn.slick.opengl.TextureLoader;
 import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.util.ResourceLoader;
 import org.lwjgl.opengl.Display;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.input.Mouse;
+
 import static org.lwjgl.opengl.GL11.*;
 
 import org.newdawn.slick.Color;
@@ -131,6 +134,16 @@ public class Renderer {
 	     font.drawString(100, 200, "Hello!");
 		*/
 		//DrawTexturedBox(10, 10, 200, 300, texDirt.getTextureID());
-		Main.fr.renderString("012345", 100, 100, 2);
+		glPushMatrix();
+		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
+		glOrtho(0,  800, 0, 600, -1, 1);
+		glMatrixMode(GL_MODELVIEW);
+		glTranslatef(0, 0, 0);
+		int x = Mouse.getX();
+		int y = Mouse.getY();
+		Main.fr.renderString("" + x, -370, 270, 1);
+		Main.fr.renderString("" + y, -370, 260, 1);		
+		glPopMatrix();
 	}
 }
