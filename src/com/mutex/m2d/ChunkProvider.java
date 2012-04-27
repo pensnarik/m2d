@@ -1,7 +1,5 @@
 package com.mutex.m2d;
 
-import java.io.*;
-
 public class ChunkProvider
 {
 	public World world;
@@ -24,11 +22,11 @@ public class ChunkProvider
 			chunk = new Chunk(world, x_, y_);
 			for (int i = 0; i < Chunk.width * Chunk.height; i++)
 			{
-				int type = world.RandomGen.nextInt(3);
+				int type = world.RandomGen.nextInt(2);
 				x = x_ * Chunk.width + i % Chunk.width;
 				y = y_ * Chunk.height + (i - (i % Chunk.width))/Chunk.width;
 				if (y == 0) type = 1;
-				if (type == 2 | y > 0) {
+				if (y > 0) {
 					chunk.blocks[i] = null;
 				} else {
 					chunk.blocks[i] = new Block(type, x, y);

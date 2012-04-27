@@ -65,12 +65,12 @@ public class Renderer {
 	
 	public void renderPlayer()
 	{
-		double x = world.player.x;
-		double y = world.player.y;
+		double x = world.player.posX;
+		double y = world.player.posY;
 		float x1 = (float) x - blockSize / 2 * scale;
 		float y1 = (float) y;
-		float x2 = (float)(x + blockSize * scale);
-		float y2 = (float)(y + blockSize * 2 * scale);
+		float x2 = (float)(x + blockSize / 2 * scale);
+		float y2 = (float)(y + blockSize * scale * 1.2);
 		DrawTexturedBox(x1, y1, x2, y2, textPlayer.getTextureID());
 	}
 	
@@ -151,30 +151,34 @@ public class Renderer {
 		glTranslatef(0, 0, 0);
 		int x = Mouse.getX();
 		int y = Mouse.getY();
-		Main.fr.renderString("" + x, -370, 270, 1);
-		Main.fr.renderString("" + y, -370, 260, 1);
-		Main.fr.renderString("" + world.player.x, -370, 250, 1);
-		Main.fr.renderString("" + world.player.y, -370, 240, 1);		
+		Game.fr.renderString("m2d, version 0.01 alpha", -380, 290, 1);
+		Game.fr.renderString("Mouse X:" + x, -380, 270, 1);
+		Game.fr.renderString("Mouse Y:" + y, -380, 260, 1);
+		Game.fr.renderString("Player X:" + world.player.posX, -380, 250, 1);
+		Game.fr.renderString("Player Y:" + world.player.posY, -380, 240, 1);
+		Game.fr.renderString("fps: " + Game.lastFps, -380, 230, 1);
+		Game.fr.renderString("Memory: " + Game.memoryUsed + "MB", -380, 220, 1);
+		//Game.fr.renderString("" + world.player.stopTimer, -370, 220, 1);
 		glPopMatrix();
 	}
 	
 	public int getScreenCoordX(double x_)
 	{
-		return (int) (x_ * scale * blockSize - world.player.x * scale * blockSize);
+		return (int) (x_ * scale * blockSize - world.player.posX * scale * blockSize);
 	}
 	
 	public int getScreenCoordY(double y_)
 	{
-		return (int) (y_ * scale * blockSize - world.player.y * scale * blockSize);
+		return (int) (y_ * scale * blockSize - world.player.posY * scale * blockSize);
 	}
 	
 	public boolean isBlockVisible(Block b)
 	{
 		int bx = getScreenCoordX(b.x);
 		int by = getScreenCoordY(b.y);
-		return  !(bx < - Main.DisplayWidth / 2 - blockSize * scale | 
-				  by < - Main.DisplayHeight / 2 - blockSize * scale | 
-				  bx > Main.DisplayWidth / 2 + blockSize * scale |
-				  by > Main.DisplayHeight / 2 + blockSize * scale);
+		return  !(bx < - Game.DisplayWidth / 2 - blockSize * scale | 
+				  by < - Game.DisplayHeight / 2 - blockSize * scale | 
+				  bx > Game.DisplayWidth / 2 + blockSize * scale |
+				  by > Game.DisplayHeight / 2 + blockSize * scale);
 	}
 }

@@ -12,4 +12,9 @@ public class Block {
 		blockID = blockID_;
 		//System.out.println("New block: " + x + ", " + y);
 	}
+	
+	public void tick()
+	{
+		
+	}
 }

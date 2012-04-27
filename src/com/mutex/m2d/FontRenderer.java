@@ -35,7 +35,7 @@ public class FontRenderer
 		
 		for (int i = 0; i < s.length(); i++)
 		{
-			int c = (int) s.toLowerCase().charAt(i);
+			int c = (int) s.charAt(i);
 			if (c >= 0x30 && c <= 0x39) {
 				pos = c - 0x30;
 			} else if (c == 0x2e) {
@@ -44,6 +44,12 @@ public class FontRenderer
 				pos = 81;
 			} else if (c == 0x2b) { /* '+' */
 				pos = 82;
+			} else if (c >= 0x41 && c <= 0x5a) { /* 'A' - 'Z' */
+				pos = c - 0x41 + 17;
+			} else if (c >= 0x61 && c <= 0x7a) { /* 'a' - 'z' */
+				pos = c - 0x61 + 49;
+			} else if (c == 0x3a) {
+				pos = 10;
 			} else {
 				pos = -1;
 			}
