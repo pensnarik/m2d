@@ -27,9 +27,16 @@ public class ChunkProvider
 				y = y_ * Chunk.height + (i - (i % Chunk.width))/Chunk.width;
 				if (y == 0) type = 1;
 				if (y > 0) {
-					chunk.blocks[i] = null;
+					if (world.RandomGen.nextInt(5) != 0)
+					{
+						chunk.blocks[i] = null;
+					} else {
+						chunk.blocks[i] = new Block(0, x, y);
+						world.newBlock(chunk.blocks[i]);
+					}
 				} else {
 					chunk.blocks[i] = new Block(type, x, y);
+					world.newBlock(chunk.blocks[i]);
 				}
 			}
 			loadedChunks.add(hash,  chunk);

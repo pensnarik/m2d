@@ -1,20 +1,24 @@
 package com.mutex.m2d;
 
 import java.util.Random;
+import java.util.*;
 
 public class World {
 	
 	public ChunkProvider chunkProvider;
 	public EntityPlayer player;
 	public Random RandomGen;
+	private int totalTicks;
+	ArrayList<Block> blocks;
 	
 	World()
 	{
+		totalTicks = 0;
 		RandomGen = new Random(1);
 		chunkProvider = new ChunkProvider(this);
-		int hash = chunkProvider.chunkCoordsToHash(2, 2);
-		System.out.println("hash = " + hash);
 		player = new EntityPlayer(this);
+		player.setPosition(0,  2);
+		blocks = new ArrayList<Block>();
 		prepareVisibleChunks();
 	}
 	
@@ -24,6 +28,7 @@ public class World {
 		int Cy = (int)(player.posY / Chunk.height);
 		for (int x = Cx - 1; x <= Cx + 1; x++) {
 			for (int y = Cy - 1; y <= Cy + 1; y++) {
+				@SuppressWarnings("unused")
 				Chunk chunk = chunkProvider.provideChunk(x,  y);
 			}
 		}
@@ -34,11 +39,29 @@ public class World {
 	{
 		updateEntities();
 		updateBlocks();
+		checkCollisions();
+		if (totalTicks++ % 1000 == 0)
+		{
+			System.out.println("blocks.size() = " + blocks.size());
+			System.out.println("Player is " + player.isCollided);
+		}
 	}
 	
 	public void checkCollisions()
 	{
-		
+		Iterator<Block> iter = blocks.iterator();
+		boolean flag = false;
+		while(iter.hasNext())
+		{
+			Block b = iter.next();
+			if (b.x - 0.5 < player.posX && b.y - 0.5 < player.posY && b.x + 0.5 > player.posX && b.y + 0.5 > player.posY)
+			{
+				//System.out.println("Pos: " + player.posX + ", " + player.posY);
+				player.collidedWithBlock(b);
+				flag = true;
+			}
+		}
+		player.isCollided = flag;
 	}
 	
 	public void updateBlocks()
@@ -57,6 +80,11 @@ public class World {
 	public void updateEntities()
 	{
 		player.onUpdate();
+	}
+	
+	public void newBlock(Block block)
+	{
+		blocks.add(block);
 	}
 	
 }

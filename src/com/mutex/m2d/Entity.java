@@ -13,11 +13,15 @@ public class Entity
 	
 	public int stopTimer; /* change to private */
 	
+	public boolean isCollided;
+	public BoundingBox boundingBox;
+	
 	
 	public Entity(World world_)
 	{
 		entityID = nextEntityID++;
 		world = world_;
+		isCollided = false;
 	}
 	
 	public void setPosition(double x, double y)
@@ -50,5 +54,14 @@ public class Entity
 		speedX = speedX_;
 		speedY = speedY_;
 		stopTimer = 100;
+	}
+	
+	public void collidedWithBlock(Block b)
+	{
+		isCollided = true;
+		if (b.x < posX) {
+			speedX = 0;
+			posX = b.x + 1 + 0.01;
+		}
 	}
 }
