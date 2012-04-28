@@ -3,6 +3,7 @@ package com.mutex.m2d;
 import java.util.Random;
 import java.util.*;
 
+
 public class World {
 	
 	public ChunkProvider chunkProvider;
@@ -16,13 +17,10 @@ public class World {
 		totalTicks = 0;
 		RandomGen = new Random(1);
 		chunkProvider = new ChunkProvider(this);
-		player = new EntityPlayer(this);
-		player.setPosition(0,  2);
-		blocks = new ArrayList<Block>();
-		prepareVisibleChunks();
+		blocks = new ArrayList<Block>();		
 	}
 	
-	private void prepareVisibleChunks()
+	public void prepareVisibleChunks()
 	{
 		int Cx = (int)(player.posX / Chunk.width);
 		int Cy = (int)(player.posY / Chunk.height);
@@ -42,26 +40,14 @@ public class World {
 		checkCollisions();
 		if (totalTicks++ % 1000 == 0)
 		{
-			System.out.println("blocks.size() = " + blocks.size());
-			System.out.println("Player is " + player.isCollided);
+			//System.out.println("blocks.size() = " + blocks.size());
+			System.out.println("player.isCollided = " + player.isCollided);
 		}
 	}
 	
 	public void checkCollisions()
 	{
-		Iterator<Block> iter = blocks.iterator();
-		boolean flag = false;
-		while(iter.hasNext())
-		{
-			Block b = iter.next();
-			if (b.x - 0.5 < player.posX && b.y - 0.5 < player.posY && b.x + 0.5 > player.posX && b.y + 0.5 > player.posY)
-			{
-				//System.out.println("Pos: " + player.posX + ", " + player.posY);
-				player.collidedWithBlock(b);
-				flag = true;
-			}
-		}
-		player.isCollided = flag;
+		/* Moved to Entity.moveEntity() */
 	}
 	
 	public void updateBlocks()

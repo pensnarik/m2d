@@ -67,10 +67,10 @@ public class Renderer {
 	{
 		double x = world.player.posX;
 		double y = world.player.posY;
-		float x1 = (float) x - blockSize / 2 * scale;
-		float y1 = (float) y;
-		float x2 = (float)(x + blockSize / 2 * scale);
-		float y2 = (float)(y + blockSize * scale * 1.2);
+		float x1 = (float) getScreenCoordX( world.player.bb.x1 );
+		float y1 = (float) getScreenCoordY( world.player.bb.y1 );
+		float x2 = (float) getScreenCoordX( world.player.bb.x2 );
+		float y2 = (float) getScreenCoordY( world.player.bb.y2 );
 		DrawTexturedBox(x1, y1, x2, y2, textPlayer.getTextureID());
 	}
 	

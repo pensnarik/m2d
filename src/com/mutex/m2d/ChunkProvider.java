@@ -13,7 +13,7 @@ public class ChunkProvider
 	
 	public Chunk provideChunk(int x_, int y_)
 	{
-		System.out.println("provideChunk(" + x_ + ", " + y_ + ")");
+		//System.out.println("provideChunk(" + x_ + ", " + y_ + ")");
 		int hash = chunkCoordsToHash(x_, y_);		
 		Chunk chunk = (Chunk) loadedChunks.getValueByKey(hash);
 		int x; int y;

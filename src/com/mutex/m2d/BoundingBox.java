@@ -24,4 +24,22 @@ public class BoundingBox
 		y1 = posY - height_/2;
 		y2 = posY + height_/2;
 	}
+	
+	public void setWidth(double width_)
+	{
+		x1 = posX - width_/2;
+		x2 = posX + width_/2;		
+	}
+	
+	public void setHeight(double height_)
+	{
+		y1 = posY - height_/2;
+		y2 = posY + height_/2;		
+	}
+	
+	public boolean isIntersectWith(BoundingBox bb)
+	{
+		if (y2 < bb.y1 || y1 > bb.y2 || x1 > bb.x2 || x2 < bb.x1) return false;
+		return true;
+	}
 }

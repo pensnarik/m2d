@@ -9,7 +9,7 @@ public class EntityLiving extends Entity
 	public EntityLiving(World world_) {
 		super(world_);
 		maxSpeed = 0.1f;
-		isJumping = false;
+		isJumping = false;		
 	}
 	
 	public boolean getIsJumping()

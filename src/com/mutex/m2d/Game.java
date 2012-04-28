@@ -20,6 +20,7 @@ public class Game
 	public static World world;
 	public static Renderer r;
 	public static FontRenderer fr;
+	public static GameSettings gameSettings = new GameSettings();
 	private static int ticksRun;
 	private static int fpsCounter;
 	public static int lastFps;
@@ -28,6 +29,7 @@ public class Game
 	private static int keyPressTime;
 	public static long memoryUsed;
 	private static int secCounter;
+	public static EntityPlayer player;
 	
 	private static Game thisGame = new Game();
 	
@@ -61,6 +63,11 @@ public class Game
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		world = new World();
+		player = new EntityPlayer(world);
+		player.setPosition(0,  5);
+		player.movementInput = new MovementInput(gameSettings);
+		world.player = player;
+		world.prepareVisibleChunks();
 		r = new Renderer(world);
 		fr = new FontRenderer(r);
 		r.init();
@@ -121,13 +128,27 @@ public class Game
 			updateMemoryUsage();
 			secCounter = 0;
 		}
+		do
+		{
+			if (!Keyboard.next())
+			{
+				break;		
+			}
+			KeyBinding.setState(Keyboard.getEventKey(), Keyboard.getEventKeyState());
+			if (Keyboard.getEventKeyState())
+			{
+				KeyBinding.onTick(Keyboard.getEventKey());
+			}
+		} while (true);
 		world.tick();
 	}
 	
 	private static void logic() {
-
+		
 		if (Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)) {
 			running = false;
+		}
+		/*
 		} else if (Keyboard.isKeyDown(Keyboard.KEY_G)) {
 			ShowGrid = !ShowGrid;
 		} else if (Keyboard.isKeyDown(Keyboard.KEY_LEFT)) {
@@ -138,7 +159,7 @@ public class Game
 			world.player.moveEntity(0, world.player.maxSpeed);
 		} else if (Keyboard.isKeyDown(Keyboard.KEY_DOWN)) {
 			world.player.moveEntity(0, -world.player.maxSpeed);
-		}
+		}*/
 	}
 	
 	private static void render() {
