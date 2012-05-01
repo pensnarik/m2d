@@ -1,6 +1,5 @@
 package com.mutex.m2d;
 
-import java.util.Random;
 import java.util.*;
 
 
@@ -37,7 +36,6 @@ public class World {
 	{
 		updateEntities();
 		updateBlocks();
-		checkCollisions();
 		if (totalTicks++ % 1000 == 0)
 		{
 			//System.out.println("blocks.size() = " + blocks.size());
@@ -56,7 +54,7 @@ public class World {
 		{
 			Chunk chunk = (Chunk) chunkProvider.loadedChunks.getValueByIndex(i);
 			for (int j = 0; j < Chunk.height * Chunk.width; j++) {
-				Block b = chunk.blocks[j];
+				Block b = null; //chunk.blocks[j];
 				if (b == null) continue;
 				b.tick();
 			}
@@ -71,6 +69,35 @@ public class World {
 	public void newBlock(Block block)
 	{
 		blocks.add(block);
+	}
+	
+	public Block getBlockUnderEntity(Entity e)
+	{
+		Iterator<Block> iter = blocks.iterator();
+		while (iter.hasNext())
+		{
+			Block b = iter.next();
+			double delta = e.bb.y1 - b.bb.y2;
+			if ( delta > 0 && delta < 0.1 && ( b.bb.posX > e.bb.x1 && b.bb.posX < e.bb.x2 )) {
+				return b;
+			}
+		}
+		return null;
+	}
+	
+	public Chunk getChunkFromChunkCoords(int x_, int y_)
+	{
+		return chunkProvider.provideChunk(x_, y_);
+	}
+	
+	public Chunk getChunkFromBlockCoords(int x_, int y_)
+	{
+		return getChunkFromChunkCoords(x_ >> 4, y_ >> 4);
+	}
+	
+	public int getBlockID(int x_, int y_)
+	{
+		return getChunkFromBlockCoords(x_, y_).getBlockID(x_ & 16, y_ & 16);
 	}
 	
 }

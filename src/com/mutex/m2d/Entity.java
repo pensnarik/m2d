@@ -1,8 +1,9 @@
 package com.mutex.m2d;
 
 import java.util.Iterator;
+import java.util.*;
 
-public class Entity
+public abstract class Entity
 {
 	private static int nextEntityID = 0;
 	public int entityID;
@@ -21,6 +22,8 @@ public class Entity
 	
 	public boolean isCollided;
 	public BoundingBox bb;
+	
+	public boolean onGround;
 	
 	
 	public Entity(World world_)
@@ -69,12 +72,27 @@ public class Entity
 		prevPosY = posY;
 		prevSpeedX = speedX;
 		prevSpeedY = speedY;
-		posX += speedX * 0.01;
-		posY += speedY * 0.01;
-		speedX = 0;
-		speedY = 0;
-		updateBB();
+		//speedX = 0;
+		//speedY = 0;
 		moveEntity(speedX, speedY);
+		updateBB();
+	}
+	
+	/*
+	 * Adujusting entity speed and coords, taking care for physics
+	 */
+	private void adjustSpeedAndCoords()
+	{
+		List<Block> nearestBlocks = new ArrayList();
+		int x = MathHelper.round_float((float) posX);
+		int y = MathHelper.round_float((float) posY);
+		for(int i = x - 1; i < 3; i++)
+		{
+			for(int j = y - 1; j < 3; j++)
+			{
+				
+			}
+		}
 	}
 	
 	public void moveEntity(double speedX_, double speedY_)
@@ -94,15 +112,25 @@ public class Entity
 		isCollided = flag;
 		if (collidedBlock != null) {
 			collidedWithBlock(collidedBlock);
-			posX = prevPosX;
-			posY = prevPosY;
-			//posX = posX - prevSpeedX;
-			//posY = posY - prevSpeedY;
+			//posX = prevPosX;
+			//posY = prevPosY;
+			if (speedX < 0)	speedX = 0;
+			/* Use speedX and speedY to stop Entity */
 			
 		} else {
 			speedX = speedX_;
 			speedY = speedY_;
+			if (world.getBlockUnderEntity(this) == null)
+			{
+				//speedY = -1.0f;
+			}
+			else 
+			{
+				speedY = 0;
+			}
 		}
+		posX += speedX * 0.01;
+		posY += speedY * 0.01;
 	}
 	
 	public void collidedWithBlock(Block b)

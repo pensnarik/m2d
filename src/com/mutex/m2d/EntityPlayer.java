@@ -9,19 +9,21 @@ public class EntityPlayer extends EntityLiving
 		super(world_);
 		maxSpeed = 0.2f;
 		height = 0.9f;
+		isJumping = false;
 		updateBB();
 	}
 	
 	public void onUpdate()
 	{
-		super.onUpdate();
 		movementInput.update();
 		updateEntityActionState();
+		super.onUpdate();
 	}
 	
 	public void updateEntityActionState()
 	{
 		speedX = movementInput.moveX;
 		speedY = movementInput.moveY;		
+		isJumping = movementInput.jump;
 	}
 }

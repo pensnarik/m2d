@@ -8,12 +8,15 @@ import org.lwjgl.input.Mouse;
 
 import static org.lwjgl.opengl.GL11.*;
 
+import java.awt.Color;
 import java.io.IOException;
 
 public class Renderer {
 	public Texture texDirt;
 	public Texture texStone;
 	public Texture textPlayer;
+	public Texture textSky;
+	public Texture textGray;
 	public World world;
 	public final int scale = 2;
 	public final int blockSize = 16;
@@ -39,11 +42,18 @@ public class Renderer {
 			texDirt = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("./res/dirt.png"));
 			texStone = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("./res/stone.png"));
 			textPlayer = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("./res/player.png"));
+			textSky = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("./res/sky.png"));			
+			textGray = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("./res/gray.png"));			
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public void renderSky()
+	{
+		DrawTexturedBox(0 - Game.DisplayWidth / 2, 0 - Game.DisplayHeight / 2, Game.DisplayWidth / 2, Game.DisplayHeight / 2, textSky.getTextureID());
 	}
 	
 	public void drawGrid()
@@ -80,22 +90,44 @@ public class Renderer {
 		{
 			Chunk chunk = (Chunk) world.chunkProvider.loadedChunks.getValueByIndex(i);
 			for (int j = 0; j < Chunk.height * Chunk.height; j++) {
-					Block b = chunk.blocks[j];
-					if(b == null) continue;
-					if (!isBlockVisible(b)) continue;
-					int x1 = getScreenCoordX(b.x) - blockSize / 2 * scale;
-					int x2 = getScreenCoordX(b.x) + blockSize / 2 * scale;
-					int y1 = getScreenCoordY(b.y) - blockSize / 2 * scale;
-					int y2 = getScreenCoordY(b.y) + blockSize / 2 * scale;
-					if (b.blockID == 0) {
+					int blockID = chunk.blocks[j];
+					//if (!isBlockVisible(b)) continue;
+					int x1 = getScreenCoordX(chunk.x + (j & 0xf0) >> 4) - blockSize / 2 * scale;
+					int x2 = getScreenCoordX(chunk.x + (j & 0xf0) >> 4) + blockSize / 2 * scale;
+					int y1 = getScreenCoordY(chunk.y + (j & 0x0f)) - blockSize / 2 * scale;
+					int y2 = getScreenCoordY(chunk.y + (j & 0x0f)) + blockSize / 2 * scale;
+					if (blockID == 0) {
 						DrawTexturedBox(x1, y1, x2, y2, texDirt.getTextureID());
-					} else if (b.blockID == 1) {
+					} else if (blockID == 1) {
 						DrawTexturedBox(x1, y1, x2, y2, texStone.getTextureID());
 					} else {
 						continue;
 					}
+					//b = world.getBlockUnderEntity((Entity) world.player);
+					//if (b != null) {
+					//	b.setHighlighted(true);
+					//	highlightBlock(b);
+					//}
+					
 			}
 		}
+	}
+	
+	public void highlightBlock(Block b)
+	{
+		float bx = getScreenCoordX(b.x);
+		float by = getScreenCoordY(b.y);
+		glColor3f(0, 0.8f, 0);
+		glBegin(GL_LINES);
+			glVertex2f(bx - blockSize / 2 * scale, by - blockSize / 2 * scale);
+			glVertex2f(bx - blockSize / 2 * scale, by + blockSize / 2 * scale);
+			glVertex2f(bx - blockSize / 2 * scale, by + blockSize / 2 * scale);
+			glVertex2f(bx + blockSize / 2 * scale, by + blockSize / 2 * scale);
+			glVertex2f(bx + blockSize / 2 * scale, by + blockSize / 2 * scale);
+			glVertex2f(bx + blockSize / 2 * scale, by - blockSize / 2 * scale);
+			glVertex2f(bx + blockSize / 2 * scale, by - blockSize / 2 * scale);
+			glVertex2f(bx - blockSize / 2 * scale, by - blockSize / 2 * scale);			
+		glEnd();
 	}
 	
 	public void DrawTexturedBox(float x1, float y1, float x2, float y2, int textureID)
@@ -142,7 +174,7 @@ public class Renderer {
 		 Color.black.bind(); 
 	     font.drawString(100, 200, "Hello!");
 		*/
-		//DrawTexturedBox(10, 10, 200, 300, texDirt.getTextureID());
+		DrawTexturedBox(-390, 190, -140, 300, textGray.getTextureID());
 		glPushMatrix();
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
@@ -152,12 +184,13 @@ public class Renderer {
 		int x = Mouse.getX();
 		int y = Mouse.getY();
 		Game.fr.renderString("m2d, version 0.01 alpha", -380, 290, 1);
-		Game.fr.renderString("Mouse X:" + x, -380, 270, 1);
-		Game.fr.renderString("Mouse Y:" + y, -380, 260, 1);
+		Game.fr.renderString("Mouse X:" + getSceneCoordX(x), -380, 270, 1);
+		Game.fr.renderString("Mouse Y:" + getSceneCoordY(y), -380, 260, 1);
 		Game.fr.renderString("Player X:" + world.player.posX, -380, 250, 1);
 		Game.fr.renderString("Player Y:" + world.player.posY, -380, 240, 1);
 		Game.fr.renderString("fps: " + Game.lastFps, -380, 230, 1);
 		Game.fr.renderString("Memory: " + Game.memoryUsed + "MB", -380, 220, 1);
+		Game.fr.renderString("SpeedY: " + Game.player.speedY, -380, 210, 1);
 		//Game.fr.renderString("" + world.player.stopTimer, -370, 220, 1);
 		glPopMatrix();
 	}
@@ -170,6 +203,16 @@ public class Renderer {
 	public int getScreenCoordY(double y_)
 	{
 		return (int) (y_ * scale * blockSize - world.player.posY * scale * blockSize);
+	}
+	
+	public double getSceneCoordX(int x_)
+	{
+		return (double) world.player.posX + (double) ((x_ - Game.DisplayWidth / 2) / ((double) (scale * blockSize)));
+	}
+	
+	public double getSceneCoordY(int y_)
+	{
+		return (double) world.player.posY + (double) ((y_ - Game.DisplayHeight / 2) / ((double) (scale * blockSize)));	
 	}
 	
 	public boolean isBlockVisible(Block b)

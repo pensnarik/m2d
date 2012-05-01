@@ -148,18 +148,6 @@ public class Game
 		if (Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)) {
 			running = false;
 		}
-		/*
-		} else if (Keyboard.isKeyDown(Keyboard.KEY_G)) {
-			ShowGrid = !ShowGrid;
-		} else if (Keyboard.isKeyDown(Keyboard.KEY_LEFT)) {
-			world.player.moveEntity(-world.player.maxSpeed, 0);
-		} else if (Keyboard.isKeyDown(Keyboard.KEY_RIGHT)) {
-			world.player.moveEntity(world.player.maxSpeed, 0);
-		} else if (Keyboard.isKeyDown(Keyboard.KEY_UP)) {
-			world.player.moveEntity(0, world.player.maxSpeed);
-		} else if (Keyboard.isKeyDown(Keyboard.KEY_DOWN)) {
-			world.player.moveEntity(0, -world.player.maxSpeed);
-		}*/
 	}
 	
 	private static void render() {
@@ -168,8 +156,9 @@ public class Game
 		glPushMatrix();
 
 		glTranslatef(DisplayWidth / 2, DisplayHeight / 2, 0.0f);
+		r.renderSky();
 		r.renderMap();
-		if (ShowGrid) r.drawGrid();
+		if (!ShowGrid) r.drawGrid();
 		r.renderOverlay();
 		r.renderPlayer();
 		glPopMatrix();

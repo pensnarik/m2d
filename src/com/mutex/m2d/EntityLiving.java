@@ -17,10 +17,29 @@ public class EntityLiving extends Entity
 		return isJumping;
 	}
 	
+	public void onUpdate()
+	{
+		super.onUpdate();
+		onLivingUpdate();
+	}
+	
+	public void onLivingUpdate()
+	{
+		updateEntityActionState();
+		if (isJumping)
+		{
+			jump();
+		}
+	}
+	
+	public void updateEntityActionState()
+	{
+		
+	}
+	
 	protected void jump()
 	{
-		if(isJumping) return;
-		speedY = 0.3;
+		speedY += 1.3;
 	}
 	
 }
