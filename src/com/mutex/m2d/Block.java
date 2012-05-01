@@ -1,5 +1,7 @@
 package com.mutex.m2d;
 
+import com.mutex.m2d.Blocks.*;
+
 public class Block {
 	public final int blockID;
 	protected BoundingBox bb;
@@ -9,9 +11,18 @@ public class Block {
 	public float height;
 	private boolean highlighted;
 	
-	Block(int blockID_, int x_, int y_)
+	public static final BlockDirt blockDirt;
+	public static final BlockStone blockStone;
+	
+	static
 	{
-		x = x_; y = y_;
+		blockDirt = new BlockDirt(1);
+		blockStone = new BlockStone(2);
+	}
+	
+	public Block(int blockID_)
+	{
+		//x = x_; y = y_;
 		blockID = blockID_;
 		width = height = 1;
 		bb = new BoundingBox((double) x, (double) y, width, height);
