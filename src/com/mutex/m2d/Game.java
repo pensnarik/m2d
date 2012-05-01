@@ -64,7 +64,7 @@ public class Game
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		world = new World();
 		player = new EntityPlayer(world);
-		player.setPosition(0,  5);
+		player.setPosition(0,  0);
 		player.movementInput = new MovementInput(gameSettings);
 		world.player = player;
 		world.prepareVisibleChunks();
@@ -153,15 +153,11 @@ public class Game
 	private static void render() {
 		glClear(GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 		glClear(GL_COLOR_BUFFER_BIT);
-		glPushMatrix();
-
-		glTranslatef(DisplayWidth / 2, DisplayHeight / 2, 0.0f);
 		r.renderSky();
 		r.renderMap();
-		if (!ShowGrid) r.drawGrid();
+		r.drawGrid();
 		r.renderOverlay();
 		r.renderPlayer();
-		glPopMatrix();
 	}	
 	
 	public static void cleanup() {

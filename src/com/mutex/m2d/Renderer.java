@@ -59,16 +59,34 @@ public class Renderer {
 	public void drawGrid()
 	{
 		glColor3f(0, 1, 0);
-		for (int y = 0; y < Display.getHeight(); y+= 16) {
-			for (int x = 0; x < Display.getWidth(); x += 16) {
+		for (int y = -10; y <= 10; y++)
+		{
+			for (int x = -10; x <= 10; x ++)
+			{
+				if (x == 0)
+				{
+					glLineWidth(2.0f);
+				}
+				else
+				{
+					glLineWidth(1.0f);
+				}
 				glBegin(GL_LINES);
-					glVertex2f(x, 0);
-					glVertex2f(x, Display.getHeight());
+					glVertex2f(x, -10);
+					glVertex2f(x, 10);
 				glEnd();
 			}
+			if (y == 0)
+			{
+				glLineWidth(2.0f);
+			}
+			else
+			{
+				glLineWidth(1.0f);
+			}
 			glBegin(GL_LINES);
-				glVertex2f(0, y);
-				glVertex2f(Display.getWidth(), y);
+				glVertex2f(-10, y);
+				glVertex2f(10, y);
 			glEnd();
 		}
 	}
@@ -86,19 +104,27 @@ public class Renderer {
 	
 	public void renderMap()
 	{
+		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
+		glOrtho(-12.5 + (float)world.player.posX, 12.5 + (float)world.player.posX, -9.375 + (float)world.player.posY, 9.375 + (float)world.player.posY, -1, 1);
+		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();
+		//glTranslatef((float)world.player.posX, (float)world.player.posY, 0);
+		glPushMatrix();
 		for (int i = 0; i < world.chunkProvider.loadedChunks.getSize(); i++)
 		{
 			Chunk chunk = (Chunk) world.chunkProvider.loadedChunks.getValueByIndex(i);
-			for (int j = 0; j < Chunk.height * Chunk.height; j++) {
+			for (int j = 0; j < Chunk.width * Chunk.height; j++) {
 					int blockID = chunk.blocks[j];
-					//if (!isBlockVisible(b)) continue;
-					int x1 = getScreenCoordX(chunk.x + (j & 0xf0) >> 4) - blockSize / 2 * scale;
-					int x2 = getScreenCoordX(chunk.x + (j & 0xf0) >> 4) + blockSize / 2 * scale;
-					int y1 = getScreenCoordY(chunk.y + (j & 0x0f)) - blockSize / 2 * scale;
-					int y2 = getScreenCoordY(chunk.y + (j & 0x0f)) + blockSize / 2 * scale;
-					if (blockID == 0) {
+					
+					float x1 = (chunk.x * Chunk.width + ((j & 0x3f)));
+					float x2 = x1 + 1;
+					float y1 = (chunk.y * Chunk.height + ((j & 0xfc0) >> 6));
+					float y2 = y1 + 1;
+					if (!isCoordInScreen(x1, y1)) continue;
+					if (blockID == Block.blockDirt.blockID) {
 						DrawTexturedBox(x1, y1, x2, y2, texDirt.getTextureID());
-					} else if (blockID == 1) {
+					} else if (blockID == Block.blockStone.blockID) {
 						DrawTexturedBox(x1, y1, x2, y2, texStone.getTextureID());
 					} else {
 						continue;
@@ -111,6 +137,13 @@ public class Renderer {
 					
 			}
 		}
+		glPopMatrix();
+	}
+	
+	public boolean isCoordInScreen(float x, float y)
+	{
+		return ((world.player.posX - x) > -13 & (world.player.posX - x) < 14 &
+				(world.player.posY - y) > -12 & (world.player.posY - y)  < 12);
 	}
 	
 	public void highlightBlock(Block b)
@@ -174,13 +207,15 @@ public class Renderer {
 		 Color.black.bind(); 
 	     font.drawString(100, 200, "Hello!");
 		*/
-		DrawTexturedBox(-390, 190, -140, 300, textGray.getTextureID());
-		glPushMatrix();
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
-		glOrtho(0,  800, 0, 600, -1, 1);
+		glOrtho(-400, 400, -300, 300, -1, 1);
 		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();
+		glPushMatrix();
+		glColor3f(1, 0, 0);
 		glTranslatef(0, 0, 0);
+		DrawTexturedBox(-390, 190, -140, 300, textGray.getTextureID());
 		int x = Mouse.getX();
 		int y = Mouse.getY();
 		Game.fr.renderString("m2d, version 0.01 alpha", -380, 290, 1);

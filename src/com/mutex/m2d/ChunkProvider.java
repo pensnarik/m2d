@@ -13,7 +13,7 @@ public class ChunkProvider
 	
 	public Chunk provideChunk(int x_, int y_)
 	{
-		//System.out.println("provideChunk(" + x_ + ", " + y_ + ")");
+		//System.out.println("provideChunk(" + x_ + ")");
 		int hash = chunkCoordsToHash(x_, y_);		
 		Chunk chunk = (Chunk) loadedChunks.getValueByKey(hash);
 		int x; int y;
@@ -34,7 +34,28 @@ public class ChunkProvider
 		{
 			for(int y = 0; y < Chunk.height; y++)
 			{
-				blocks_[x + y*Chunk.height] = (byte) 1;
+				if (y_ >= 0)
+				{
+					if (world.RandomGen.nextInt(10) == 0)
+					{
+						blocks_[x + y*Chunk.height] = (byte) Block.blockDirt.blockID;
+					}
+					else
+					{
+						blocks_[x + y*Chunk.height] = (byte) 0;
+					}
+				}
+				else
+				{
+					if (world.RandomGen.nextInt(2) == 0)
+					{
+						blocks_[x + y*Chunk.width] = (byte) Block.blockDirt.blockID;
+					}
+					else
+					{
+						blocks_[x + y*Chunk.width] = (byte) Block.blockStone.blockID;
+					}
+				}
 			}
 		}
 	}

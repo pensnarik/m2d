@@ -2,15 +2,14 @@ package com.mutex.m2d;
 
 import com.mutex.m2d.Block;;
 
-public class Chunk {
-
-	//public Block blocks[];
+public class Chunk
+{
 	public byte blocks[];
 	public final int x;
 	public final int y;
 	public World world;
-	public static final int width = 16;
-	public static final int height = 16;	
+	public static final int width = 64;
+	public static final int height = 64;	
 	
 	public Chunk (World world_, int x_, int y_)
 	{

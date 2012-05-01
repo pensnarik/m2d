@@ -120,7 +120,7 @@ public abstract class Entity
 		} else {
 			speedX = speedX_;
 			speedY = speedY_;
-			if (world.getBlockUnderEntity(this) == null)
+			if (world.getBlockUnderEntity(this) == 0)
 			{
 				//speedY = -1.0f;
 			}

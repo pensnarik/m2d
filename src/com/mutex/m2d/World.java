@@ -23,10 +23,12 @@ public class World {
 	{
 		int Cx = (int)(player.posX / Chunk.width);
 		int Cy = (int)(player.posY / Chunk.height);
-		for (int x = Cx - 1; x <= Cx + 1; x++) {
-			for (int y = Cy - 1; y <= Cy + 1; y++) {
+		for (int y = Cy - 1; y <= Cy + 1; y++)
+		{
+			for (int x = Cx - 1; x <= Cx + 1; x++)
+			{
 				@SuppressWarnings("unused")
-				Chunk chunk = chunkProvider.provideChunk(x,  y);
+				Chunk chunk = chunkProvider.provideChunk(x, y);
 			}
 		}
 		System.out.println("Chunks loaded: " + chunkProvider.loadedChunks.getSize());
@@ -39,7 +41,7 @@ public class World {
 		if (totalTicks++ % 1000 == 0)
 		{
 			//System.out.println("blocks.size() = " + blocks.size());
-			System.out.println("player.isCollided = " + player.isCollided);
+			//System.out.println("player.isCollided = " + player.isCollided);
 		}
 	}
 	
@@ -71,18 +73,23 @@ public class World {
 		blocks.add(block);
 	}
 	
-	public Block getBlockUnderEntity(Entity e)
+	public int getBlockUnderEntity(Entity e)
 	{
-		Iterator<Block> iter = blocks.iterator();
-		while (iter.hasNext())
+		/* Очевидно, что блок нужно искать только в текущем чанке или в чанках, которые находятся
+		 * под ним
+		 */
+		if (true) return 0;
+		int posX = MathHelper.round_float((float)e.posX);
+		int posY = MathHelper.round_float((float)e.posY);
+		for (int y = posY; y > -1000; y--)
 		{
-			Block b = iter.next();
-			double delta = e.bb.y1 - b.bb.y2;
-			if ( delta > 0 && delta < 0.1 && ( b.bb.posX > e.bb.x1 && b.bb.posX < e.bb.x2 )) {
-				return b;
+			int blockID = getBlockID(posX, y); 
+			if (blockID != 0)
+			{
+				return blockID;
 			}
 		}
-		return null;
+		return 0;
 	}
 	
 	public Chunk getChunkFromChunkCoords(int x_, int y_)
@@ -92,12 +99,17 @@ public class World {
 	
 	public Chunk getChunkFromBlockCoords(int x_, int y_)
 	{
-		return getChunkFromChunkCoords(x_ >> 4, y_ >> 4);
+		return getChunkFromChunkCoords(x_ >> 6, y_ >> 6);
 	}
 	
 	public int getBlockID(int x_, int y_)
 	{
-		return getChunkFromBlockCoords(x_, y_).getBlockID(x_ & 16, y_ & 16);
+		return getChunkFromBlockCoords(x_, y_).getBlockID(x_ << 6, y_ << 6);
+	}
+	
+	public boolean isAirBlock(int x_, int y_)
+	{
+		return getBlockID(x_, y_) == 0;
 	}
 	
 }
