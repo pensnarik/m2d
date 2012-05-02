@@ -18,6 +18,7 @@ public class World {
 		RandomGen = new Random(1);
 		chunkProvider = new ChunkProvider(this);
 		blocks = new ArrayList<Block>();		
+		collidingBoundingBoxes = new ArrayList();
 	}
 	
 	public void prepareVisibleChunks()
@@ -105,7 +106,7 @@ public class World {
 	
 	public int getBlockID(int x_, int y_)
 	{
-		return getChunkFromBlockCoords(x_, y_).getBlockID(x_ << 6, y_ << 6);
+		return getChunkFromBlockCoords(x_ >> 6, y_ >> 6).getBlockID(x_ & 0x3f, y_ & 0x3f);
 	}
 	
 	public boolean isAirBlock(int x_, int y_)

@@ -25,13 +25,24 @@ public class EntityLiving extends Entity
 		onLivingUpdate();
 	}
 	
+	public void moveEntityWithHeading(float moveX_, float moveY_)
+	{
+		if (motionX > 0)
+		{
+			int a = 0;
+		}
+		moveEntity(motionX, motionY);
+		motionY -= 0.08;
+		motionY *= 0.98;
+		motionX *= 0.98;
+	}
+	
 	public void onLivingUpdate()
 	{
 		updateEntityActionState();
-		if (isJumping)
-		{
-			jump();
-		}
+		moveX *= 0.98;
+		moveY *= 0.98;
+		moveEntityWithHeading(moveX, moveY);
 	}
 	
 	public void updateEntityActionState()
