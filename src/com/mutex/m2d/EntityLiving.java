@@ -27,10 +27,12 @@ public class EntityLiving extends Entity
 	
 	public void moveEntityWithHeading(float moveX_, float moveY_)
 	{
-		if (motionX > 0)
+		if (motionX < 0)
 		{
 			int a = 0;
 		}
+		motionX = moveX_ * 0.01; // debug
+		motionY = moveY_ * 0.01; // debug
 		moveEntity(motionX, motionY);
 		motionY -= 0.08;
 		motionY *= 0.98;

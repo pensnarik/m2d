@@ -97,7 +97,7 @@ public abstract class Entity
 		}
 		boundingBox.offset(X_, 0);
 		
-		posX = (boundingBox.minX + boundingBox.maxY) / 2;
+		posX = (boundingBox.minX + boundingBox.maxX) / 2;
 		posY = (boundingBox.minY + boundingBox.maxY) / 2;
 		isCollidedHorizontally = initialX_ != X_;
 		isCollidedVertically = initialX_ != Y_;

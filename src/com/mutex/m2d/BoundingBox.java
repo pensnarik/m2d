@@ -4,13 +4,6 @@ import java.util.*;
 
 public class BoundingBox
 {
-	public double x1;
-	public double y1;
-	public double x2;
-	public double y2;
-	public double posX;
-	public double posY;
-	
 	private static List<BoundingBox> boundingBoxes = new ArrayList();
 	private static int numBoundingBoxesInUse = 0;
 	
@@ -150,7 +143,7 @@ public class BoundingBox
 	
 	public boolean intersectsWith(BoundingBox bb)
 	{
-		if (y2 < bb.y1 || y1 > bb.y2 || x1 > bb.x2 || x2 < bb.x1) return false;
+		if (maxY < bb.minY || minY > bb.maxY || minX > bb.maxX || maxX < bb.minX) return false;
 		return true;
 	}
 	

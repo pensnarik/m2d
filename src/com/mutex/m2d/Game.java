@@ -29,7 +29,7 @@ public class Game
 	private static int keyPressTime;
 	public static long memoryUsed;
 	private static int secCounter;
-	public static EntityPlayer player;
+	public static EntityPlayerSP player;
 	
 	private static Game thisGame = new Game();
 	
@@ -63,7 +63,7 @@ public class Game
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		world = new World();
-		player = new EntityPlayer(world);
+		player = new EntityPlayerSP(world);
 		player.setPosition(0,  3);
 		player.movementInput = new MovementInput(gameSettings);
 		world.player = player;

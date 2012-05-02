@@ -1,10 +1,10 @@
 package com.mutex.m2d;
 
-public class EntityPlayer extends EntityLiving
+public class EntityPlayerSP extends EntityPlayer
 {	
 	public MovementInput movementInput;
 	
-	public EntityPlayer(World world_)
+	public EntityPlayerSP(World world_)
 	{
 		super(world_);
 		maxSpeed = 0.2f;
@@ -20,14 +20,25 @@ public class EntityPlayer extends EntityLiving
 	
 	public void onUpdate()
 	{
-		movementInput.update();
 		updateEntityActionState();
 		super.onUpdate();
 	}
 	
+	public void onLivingUpdate()
+	{
+		movementInput.update();
+		super.onLivingUpdate();
+	}
+	
 	public void updateEntityActionState()
 	{
+		super.updateEntityActionState();
 		moveX = movementInput.moveX;
+		if (moveX != 0)
+		{
+			@SuppressWarnings("unused")
+			int a = 0;
+		}
 		moveY = movementInput.moveY;		
 		isJumping = movementInput.jump;
 	}
