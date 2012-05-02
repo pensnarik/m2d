@@ -100,7 +100,7 @@ public abstract class Entity
 		posX = (boundingBox.minX + boundingBox.maxX) / 2;
 		posY = (boundingBox.minY + boundingBox.maxY) / 2;
 		isCollidedHorizontally = initialX_ != X_;
-		isCollidedVertically = initialX_ != Y_;
+		isCollidedVertically = initialY_ != Y_;
 		isCollided = isCollidedHorizontally || isCollidedVertically;
 		onGround = initialY_ != Y_ && Y_ < 0;
 		/* update fall state */
