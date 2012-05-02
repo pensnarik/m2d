@@ -76,7 +76,6 @@ public class Game
 	
 	public static void loop()
 	{
-		System.out.println("Game.run()");
 		running = true;
 		while (running) {
 			Display.update();
@@ -84,8 +83,6 @@ public class Game
 				running = false;
 			} else if (Display.isActive()) {
 				run();
-				//logic();
-				//render();
 				Display.sync(FRAMERATE);
 			} else {
 				try {
@@ -93,9 +90,9 @@ public class Game
 				} catch (InterruptedException e) {
 				}
 				logic();
-				if (Display.isVisible() || Display.isDirty()) {
-					render();
-				}
+				//if (Display.isVisible() || Display.isDirty()) {
+				//	render();
+				//}
 			}
 		}		
 	}
@@ -117,6 +114,7 @@ public class Game
 			currentTime += 1000;
 			lastFps = fpsCounter;
 			seconds++;
+			System.out.println("fps: " + lastFps);
 			fpsCounter = 0;
 		}
 	}
@@ -155,9 +153,10 @@ public class Game
 		glClear(GL_COLOR_BUFFER_BIT);
 		r.renderSky();
 		r.renderMap();
-		r.drawGrid();
+		//r.drawGrid();
 		r.renderOverlay();
 		r.renderPlayer();
+		//r.testVBO();
 	}	
 	
 	public static void cleanup() {

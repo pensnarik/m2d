@@ -29,7 +29,7 @@ public abstract class Entity
 	public Entity(World world_)
 	{
 		width = height = 1;
-		bb = new BoundingBox(0, 0, width, height);
+		//bb = new BoundingBox(0, 0, width, height);
 		entityID = nextEntityID++;
 		world = world_;
 		isCollided = false;
@@ -47,10 +47,7 @@ public abstract class Entity
 	
 	protected final void updateBB()
 	{
-		bb.posX = posX;
-		bb.posY = posY;
-		bb.setWidth(width);
-		bb.setHeight(height);
+		
 	}
 	
 	public void setPosition(double x, double y)
@@ -103,7 +100,7 @@ public abstract class Entity
 		while(iter.hasNext())
 		{
 			Block b = iter.next();
-			flag = (bb.isIntersectWith(b.bb));
+			flag = false; //(bb.isIntersectWith(b.bb));
 			if (flag) {
 				collidedBlock = b;
 				break;

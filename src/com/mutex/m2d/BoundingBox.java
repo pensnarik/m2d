@@ -1,5 +1,7 @@
 package com.mutex.m2d;
 
+import java.util.*;
+
 public class BoundingBox
 {
 	public double x1;
@@ -9,32 +11,96 @@ public class BoundingBox
 	public double posX;
 	public double posY;
 	
-	public BoundingBox(double x1_, double y1_, double x2_, double y2_)
+	private static List<BoundingBox> boundingBoxes = new ArrayList();
+	private static int numBoundingBoxesInUse = 0;
+	
+	public double minX;
+	public double minY;
+	public double maxX;
+	public double maxY;
+	
+	public static BoundingBox getBoundingBox(double minX_, double minY_, double maxX_, double maxY_)
 	{
-		x1 = x1_; y1 = y1_; x2 = x2_; y2 = y2_;
-		posX = (x1 + x2) / 2;
-		posY = (y1 + y2) / 2;
+		return new BoundingBox(minX_, minY_, maxX_, maxY_);
 	}
 	
-	public BoundingBox(double posX_, double posY_, float width_, float height_)
+	/* Используется только глобально - при освобождении памяти */
+	public static void clearBoundingBoxes()
 	{
-		posX = posX_; posY = posY_;
-		x1 = posX - width_/2;
-		x2 = posX + width_/2;
-		y1 = posY - height_/2;
-		y2 = posY + height_/2;
+		boundingBoxes.clear();
+		numBoundingBoxesInUse = 0;
 	}
 	
-	public void setWidth(double width_)
+	/* Вызывается при инициализации приложения */
+	public static void clearBoundingBoxPool()
 	{
-		x1 = posX - width_/2;
-		x2 = posX + width_/2;		
+		numBoundingBoxesInUse = 0;
 	}
 	
-	public void setHeight(double height_)
+	public static BoundingBox getBoundingBoxFromPool(double minX_, double minY_, double maxX_, double maxY_)
 	{
-		y1 = posY - height_/2;
-		y2 = posY + height_/2;		
+		if (numBoundingBoxesInUse >= boundingBoxes.size())
+		{
+			boundingBoxes.add(getBoundingBox(0, 0, 0, 0));
+		}
+		return ((BoundingBox) boundingBoxes.get(numBoundingBoxesInUse++)).setBounds(minX_, minY_, maxX_, maxY_);
+	}
+		
+	private BoundingBox(double minX_, double minY_, double maxX_, double maxY_)
+	{
+		minX = minX_; minY = minY_; maxX = maxX_; maxY = maxY_;
+	}
+	
+	public BoundingBox setBounds(double minX_, double minY_, double maxX_, double maxY_)
+	{
+		minX = minX_; minY = minY_; maxX = maxX_; maxY = maxY_;
+		return this;
+	}
+	
+	public BoundingBox addCoord(double deltaX, double deltaY)
+	{
+		double minX_ = minX;
+		double minY_ = minY;
+		double maxX_ = maxX;
+		double maxY_ = maxY;
+		
+		if (deltaX < 0)
+		{
+			minX_ += deltaX;
+		}
+		if (deltaX > 0)
+		{
+			maxX_ += deltaX;
+		}
+		if (deltaY < 0)
+		{
+			minY_ += deltaY;
+		}
+		if (deltaY > 0)
+		{
+			maxY_ += deltaY;
+		}
+		return getBoundingBoxFromPool(minX_, minY_, maxX_, maxY_);
+	}
+	
+	public BoundingBox expand(double deltaX, double deltaY)
+	{
+		return getBoundingBoxFromPool(minX - deltaX, minY - deltaY, maxX + deltaX, maxY + deltaY);
+	}
+	
+	public BoundingBox getOffsetBoundingBox(double deltaX, double deltaY)
+	{
+		return getBoundingBoxFromPool(minX + deltaX, minY + deltaY, maxX + deltaX, maxY + deltaY);
+	}
+	
+	public double calculateXOffset(BoundingBox bb, double offset)
+	{
+		return 0;
+	}
+	
+	public double calculateYOffset(BoundingBox bb, double offset)
+	{
+		return 0;
 	}
 	
 	public boolean isIntersectWith(BoundingBox bb)
