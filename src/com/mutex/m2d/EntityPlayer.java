@@ -13,6 +13,11 @@ public class EntityPlayer extends EntityLiving
 		updateBB();
 	}
 	
+	public void moveEntity(double x, double y)
+	{
+		super.moveEntity(x, y);
+	}
+	
 	public void onUpdate()
 	{
 		movementInput.update();
@@ -22,8 +27,8 @@ public class EntityPlayer extends EntityLiving
 	
 	public void updateEntityActionState()
 	{
-		speedX = movementInput.moveX;
-		speedY = movementInput.moveY;		
+		moveX = movementInput.moveX;
+		moveY = movementInput.moveY;		
 		isJumping = movementInput.jump;
 	}
 }

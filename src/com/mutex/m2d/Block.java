@@ -1,6 +1,7 @@
 package com.mutex.m2d;
 
 import com.mutex.m2d.Blocks.*;
+import java.util.*;
 
 public class Block {
 	public final int blockID;
@@ -10,6 +11,12 @@ public class Block {
 	public float height;
 	private boolean highlighted;
 	public static Block[] blocksList;
+	
+	/* Относительные значения максимальных и минимальных координат */
+	public double minX;
+	public double minY;
+	public double maxX;
+	public double maxY;
 	
 	public static final BlockDirt blockDirt;
 	public static final BlockStone blockStone;
@@ -27,7 +34,8 @@ public class Block {
 		blockID = blockID_;
 		width = height = 1;
 		highlighted = false;
-		//System.out.println("New block: " + x + ", " + y);
+		blocksList[blockID_] = this;
+		setBlockBounds(0, 0, 1, 1);
 	}
 	
 	public void tick()
@@ -43,5 +51,25 @@ public class Block {
 	public void setHighlighted(boolean flag)
 	{
 		highlighted = flag;
+	}
+	
+	public void setBlockBounds(double minX_, double minY_, double maxX_, double maxY_)
+	{
+		minX = minX_; minY = minY_;
+		maxX = maxX_; maxY = maxY_;
+	}
+	
+	public void getCollidingBoundingBoxes(World world, int x, int y, BoundingBox boundingBox, ArrayList list)
+	{
+		BoundingBox bb = getCollisionBoundingBoxFromPool(world, x, y);
+		if(bb != null && boundingBox.intersectsWith(boundingBox))
+		{
+			list.add(bb);
+		}
+	}
+	
+	public BoundingBox getCollisionBoundingBoxFromPool(World world, int x, int y)
+	{
+		return BoundingBox.getBoundingBoxFromPool(minX + x, minY + y, maxX + x, maxY + y);
 	}
 }

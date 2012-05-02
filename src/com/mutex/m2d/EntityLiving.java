@@ -5,6 +5,8 @@ public class EntityLiving extends Entity
 
 	public float maxSpeed;
 	protected boolean isJumping;
+	protected float moveX;
+	protected float moveY;
 	
 	public EntityLiving(World world_) {
 		super(world_);
@@ -39,7 +41,7 @@ public class EntityLiving extends Entity
 	
 	protected void jump()
 	{
-		speedY += 1.3;
+	
 	}
 	
 }

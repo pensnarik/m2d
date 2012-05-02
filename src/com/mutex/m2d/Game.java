@@ -64,7 +64,7 @@ public class Game
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		world = new World();
 		player = new EntityPlayer(world);
-		player.setPosition(0,  0);
+		player.setPosition(0,  3);
 		player.movementInput = new MovementInput(gameSettings);
 		world.player = player;
 		world.prepareVisibleChunks();

@@ -9,7 +9,8 @@ public class World {
 	public EntityPlayer player;
 	public Random RandomGen;
 	private int totalTicks;
-	ArrayList<Block> blocks;
+	public ArrayList<Block> blocks;
+	private ArrayList<BoundingBox> collidingBoundingBoxes;
 	
 	World()
 	{
@@ -110,6 +111,30 @@ public class World {
 	public boolean isAirBlock(int x_, int y_)
 	{
 		return getBlockID(x_, y_) == 0;
+	}
+	
+	public List<BoundingBox> getCollidingBoundingBoxes(Entity entity, BoundingBox boundingBox)
+	{
+		collidingBoundingBoxes.clear();
+		
+		int cubeMinX = MathHelper.floor_double(boundingBox.minX);
+		int cubeMinY = MathHelper.floor_double(boundingBox.minY);
+		int cubeMaxX = MathHelper.floor_double(boundingBox.maxX);
+		int cubeMaxY = MathHelper.floor_double(boundingBox.maxY);
+		
+		for (int x = cubeMinX; x < cubeMaxX; x++)
+		{
+			for (int y = cubeMinY; y < cubeMaxY; y++)
+			{
+				Block block = Block.blocksList[getBlockID(x, y)];
+				if (block != null)
+				{
+					block.getCollidingBoundingBoxes(this, x, y, boundingBox, collidingBoundingBoxes);
+				}
+			}
+		}
+		
+		return collidingBoundingBoxes;
 	}
 	
 }

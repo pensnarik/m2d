@@ -93,19 +93,76 @@ public class BoundingBox
 		return getBoundingBoxFromPool(minX + deltaX, minY + deltaY, maxX + deltaX, maxY + deltaY);
 	}
 	
+	/*
+	 * Метод возвращает расстояние вдоль оси X, на котором пересекаются b-box-ы,
+	 * если это расстояние больше, чем offset, возвращается offset, если b-box-ы не
+	 * пересекаются, возвращается offset
+	 */
 	public double calculateXOffset(BoundingBox bb, double offset)
 	{
-		return 0;
+		if (bb.maxY <= minY || bb.minY >= maxY)
+		{
+			return offset;
+		}
+		if (offset > 0 && bb.maxX < minX)
+		{
+			double delta1 = minX - bb.maxX;
+			if(delta1 < offset)
+			{
+				offset = delta1;
+			}
+		}
+		if (offset < 0 && bb.minX > minX)
+		{
+			double delta2 = maxX - bb.minX;
+			if (delta2 > offset)
+			{
+				offset = delta2;
+			}
+		}
+		return offset;
 	}
 	
 	public double calculateYOffset(BoundingBox bb, double offset)
 	{
-		return 0;
+		if (bb.maxX <= minX || bb.minX >= maxX)
+		{
+			return offset;
+		}
+		if (offset > 0 && bb.maxY < minY)
+		{
+			double delta1 = minY - bb.maxY;
+			if (delta1 < offset)
+			{
+				offset = delta1;
+			}
+		}
+		if (offset < 0 && bb.minY > minY)
+		{
+			double delta2 = maxY - bb.minY;
+			if(delta2 > offset)
+			{
+				offset = delta2;
+			}
+		}
+		return offset;
 	}
 	
-	public boolean isIntersectWith(BoundingBox bb)
+	public boolean intersectsWith(BoundingBox bb)
 	{
 		if (y2 < bb.y1 || y1 > bb.y2 || x1 > bb.x2 || x2 < bb.x1) return false;
 		return true;
+	}
+	
+	/*
+	 * Смещает b-box на величину (x_, y_)
+	 */
+	public BoundingBox offset(double x_, double y_)
+	{
+		minX += x_;
+		minY += y_;
+		maxX += x_;
+		maxY += y_;
+		return this;
 	}
 }

@@ -13,26 +13,31 @@ public abstract class Entity
 	public double posY;
 	public double prevPosX;
 	public double prevPosY;
-	public double speedX;
-	public double speedY;
-	public double prevSpeedX;
-	public double prevSpeedY;
+	public double motionX;
+	public double motionY;
 	protected float width;
 	protected float height;
 	
 	public boolean isCollided;
-	public BoundingBox bb;
+	public boolean isCollidedHorizontally;
+	public boolean isCollidedVertically;
+	
+	public final BoundingBox boundingBox = BoundingBox.getBoundingBox(0, 0, 0, 0);
 	
 	public boolean onGround;
 	
 	
 	public Entity(World world_)
 	{
-		width = height = 1;
+		width = 0.9f;
+		height = 1;
 		//bb = new BoundingBox(0, 0, width, height);
 		entityID = nextEntityID++;
 		world = world_;
 		isCollided = false;
+		isCollidedHorizontally = false;
+		isCollidedVertically = false;
+		onGround = false;
 	}
 	
 	protected void setWidth(float width_)
@@ -45,9 +50,14 @@ public abstract class Entity
 		height = height_;
 	}
 	
+	public void setSize(float width_, float height_)
+	{
+		width = width_; height = height_;
+	}
+	
 	protected final void updateBB()
 	{
-		
+		boundingBox.setBounds(posX - width/2, posY - height / 2, posX + width/2, posY + height/2);
 	}
 	
 	public void setPosition(double x, double y)
@@ -67,67 +77,41 @@ public abstract class Entity
 	{
 		prevPosX = posX;
 		prevPosY = posY;
-		prevSpeedX = speedX;
-		prevSpeedY = speedY;
-		//speedX = 0;
-		//speedY = 0;
-		moveEntity(speedX, speedY);
-		updateBB();
 	}
 	
-	/*
-	 * Adujusting entity speed and coords, taking care for physics
-	 */
-	private void adjustSpeedAndCoords()
+	public void moveEntity(double X_, double Y_)
 	{
-		List<Block> nearestBlocks = new ArrayList();
-		int x = MathHelper.round_float((float) posX);
-		int y = MathHelper.round_float((float) posY);
-		for(int i = x - 1; i < 3; i++)
+		double initialX_ = X_;
+		double initialY_ = Y_;
+		
+		List listBB = world.getCollidingBoundingBoxes(this, boundingBox.addCoord(X_, Y_));
+		for (int i = 0; i < listBB.size(); i++)
 		{
-			for(int j = y - 1; j < 3; j++)
-			{
-				
-			}
+			Y_ = ((BoundingBox) listBB.get(i)).calculateYOffset(boundingBox, Y_);
 		}
-	}
-	
-	public void moveEntity(double speedX_, double speedY_)
-	{
-		Iterator<Block> iter = world.blocks.iterator();
-		Block collidedBlock = null;
-		boolean flag = false;
-		while(iter.hasNext())
+		boundingBox.offset(0, Y_);
+		boolean onGroundNow = onGround || (initialY_ != Y_ && Y_ < 0);
+		for (int j = 0; j < listBB.size(); j++)
 		{
-			Block b = iter.next();
-			flag = false; //(bb.isIntersectWith(b.bb));
-			if (flag) {
-				collidedBlock = b;
-				break;
-			}
+			X_ = ((BoundingBox) listBB.get(j)).calculateXOffset(boundingBox, X_);
 		}
-		isCollided = flag;
-		if (collidedBlock != null) {
-			collidedWithBlock(collidedBlock);
-			//posX = prevPosX;
-			//posY = prevPosY;
-			if (speedX < 0)	speedX = 0;
-			/* Use speedX and speedY to stop Entity */
-			
-		} else {
-			speedX = speedX_;
-			speedY = speedY_;
-			if (world.getBlockUnderEntity(this) == 0)
-			{
-				//speedY = -1.0f;
-			}
-			else 
-			{
-				speedY = 0;
-			}
+		boundingBox.offset(X_, 0);
+		
+		posX = (boundingBox.minX + boundingBox.maxY) / 2;
+		posY = (boundingBox.minY + boundingBox.maxY) / 2;
+		isCollidedHorizontally = initialX_ != X_;
+		isCollidedVertically = initialX_ != Y_;
+		isCollided = isCollidedHorizontally || isCollidedVertically;
+		onGround = initialY_ != Y_ && Y_ < 0;
+		/* update fall state */
+		if (initialX_ != X_)
+		{
+			motionX = 0;
 		}
-		posX += speedX * 0.01;
-		posY += speedY * 0.01;
+		if (initialY_ != Y_)
+		{
+			motionY = 0;
+		}
 	}
 	
 	public void collidedWithBlock(Block b)

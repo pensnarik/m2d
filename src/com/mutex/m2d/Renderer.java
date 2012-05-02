@@ -107,10 +107,10 @@ public class Renderer {
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
 		
-		float x1 = (float) world.player.posX - 0.5f;
-		float y1 = (float) world.player.posY - 0.5f;
-		float x2 = (float) world.player.posX + 0.5f;
-		float y2 = (float) world.player.posY + 0.5f;
+		float x1 = (float) world.player.boundingBox.minX;
+		float y1 = (float) world.player.boundingBox.minY;
+		float x2 = (float) world.player.boundingBox.maxX;
+		float y2 = (float) world.player.boundingBox.maxY;
 		DrawTexturedBox(x1, y1, x2, y2, texturePlayer.getTextureID());
 	}
 	
@@ -244,7 +244,7 @@ public class Renderer {
 		Game.fr.renderString("Player Y:" + world.player.posY, -380, 240, 1);
 		Game.fr.renderString("fps: " + Game.lastFps, -380, 230, 1);
 		Game.fr.renderString("Memory: " + Game.memoryUsed + "MB", -380, 220, 1);
-		Game.fr.renderString("SpeedY: " + Game.player.speedY, -380, 210, 1);
+		//Game.fr.renderString("SpeedY: " + Game.player.speedY, -380, 210, 1);
 		//Game.fr.renderString("" + world.player.stopTimer, -370, 220, 1);
 		glPopMatrix();
 	}
