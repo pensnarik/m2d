@@ -31,8 +31,8 @@ public class EntityLiving extends Entity
 		{
 			int a = 0;
 		}
-		motionX = moveX_ * 0.01; // debug
-		motionY = moveY_ * 0.01; // debug
+		motionX = moveX_ * 0.1; // debug
+		motionY = moveY_ * 0.1; // debug
 		moveEntity(motionX, motionY);
 		motionY -= 0.08;
 		motionY *= 0.98;
@@ -55,6 +55,11 @@ public class EntityLiving extends Entity
 	protected void jump()
 	{
 	
+	}
+	
+	protected void fall(float distance)
+	{
+		super.fall(distance);
 	}
 	
 }

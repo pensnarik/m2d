@@ -1,10 +1,12 @@
 package com.mutex.m2d;
 
 import org.newdawn.slick.opengl.Texture;
+
 import org.newdawn.slick.opengl.TextureLoader;
 import org.newdawn.slick.util.ResourceLoader;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.input.Mouse;
+import java.util.*;
 
 import static org.lwjgl.opengl.GL11.*;
 
@@ -112,6 +114,7 @@ public class Renderer {
 		float x2 = (float) world.player.boundingBox.maxX;
 		float y2 = (float) world.player.boundingBox.maxY;
 		DrawTexturedBox(x1, y1, x2, y2, texturePlayer.getTextureID());
+		renderAABB(world.player.boundingBox);
 	}
 	
 	public void renderMap()
@@ -141,11 +144,6 @@ public class Renderer {
 					} else {
 						continue;
 					}
-					//b = world.getBlockUnderEntity((Entity) world.player);
-					//if (b != null) {
-					//	b.setHighlighted(true);
-					//	highlightBlock(b);
-					//}
 					
 			}
 		}
@@ -277,5 +275,32 @@ public class Renderer {
 				  by < - Game.DisplayHeight / 2 - blockSize * scale | 
 				  bx > Game.DisplayWidth / 2 + blockSize * scale |
 				  by > Game.DisplayHeight / 2 + blockSize * scale);
+	}
+	
+	/*
+	 * Отрисовка контуров bounding box'a
+	 */
+	public void renderAABB(BoundingBox bb)
+	{
+		Screever screever = Screever.instance;
+		screever.startDrawing(GL_LINES);
+		glColor3f(0, 0, 1);
+		screever.addVertex(bb.minX, bb.minY);
+		screever.addVertex(bb.minX, bb.maxY);
+		screever.addVertex(bb.minX, bb.maxY);
+		screever.addVertex(bb.maxX, bb.maxY);
+		screever.addVertex(bb.maxX, bb.maxY);
+		screever.addVertex(bb.maxX, bb.minY);
+		screever.addVertex(bb.maxX, bb.minY);
+		screever.addVertex(bb.minX, bb.minY);
+		screever.draw();
+	}
+	
+	public void renderListAABB(List list)
+	{
+		for (int i = 0; i < list.size(); i++)
+		{
+			renderAABB((BoundingBox) list.get(i));
+		}
 	}
 }

@@ -76,7 +76,7 @@ public class Screever
         	{
         		vboIndex = (vboIndex + 1) % vboCount;
         		ARBVertexBufferObject.glBindBufferARB(GL15.GL_ARRAY_BUFFER, vertexBuffers.get(vboIndex));
-        		ARBVertexBufferObject.glBufferDataARB(GL15.GL_ARRAY_BUFFER, byteBuffer, GL15.GL_STATIC_DRAW ); /* STREAM */
+        		ARBVertexBufferObject.glBufferDataARB(GL15.GL_ARRAY_BUFFER, byteBuffer, GL15.GL_STREAM_DRAW ); /* STATIC */
         		if (hasTexture)
         		{
         			if (useVBO)

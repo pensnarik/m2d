@@ -62,7 +62,7 @@ public class Block {
 	public void getCollidingBoundingBoxes(World world, int x, int y, BoundingBox boundingBox, ArrayList list)
 	{
 		BoundingBox bb = getCollisionBoundingBoxFromPool(world, x, y);
-		if(bb != null && boundingBox.intersectsWith(boundingBox))
+		if(bb != null && boundingBox.intersectsWith(bb))
 		{
 			list.add(bb);
 		}

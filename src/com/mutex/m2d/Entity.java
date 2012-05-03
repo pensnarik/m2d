@@ -1,6 +1,5 @@
 package com.mutex.m2d;
 
-import java.util.Iterator;
 import java.util.*;
 
 public abstract class Entity
@@ -22,6 +21,8 @@ public abstract class Entity
 	public boolean isCollidedHorizontally;
 	public boolean isCollidedVertically;
 	
+	public float fallDistance;
+	
 	public final BoundingBox boundingBox = BoundingBox.getBoundingBox(0, 0, 0, 0);
 	
 	public boolean onGround;
@@ -38,6 +39,7 @@ public abstract class Entity
 		isCollidedHorizontally = false;
 		isCollidedVertically = false;
 		onGround = false;
+		fallDistance = 0;
 	}
 	
 	protected void setWidth(float width_)
@@ -83,8 +85,11 @@ public abstract class Entity
 	{
 		double initialX_ = X_;
 		double initialY_ = Y_;
-		
+		//BoundingBox bb = boundingBox.copy();
 		List listBB = world.getCollidingBoundingBoxes(this, boundingBox.addCoord(X_, Y_));
+		/* debug */
+		Game.r.renderListAABB(listBB);
+		/* end debug */
 		for (int i = 0; i < listBB.size(); i++)
 		{
 			Y_ = ((BoundingBox) listBB.get(i)).calculateYOffset(boundingBox, Y_);
@@ -102,8 +107,8 @@ public abstract class Entity
 		isCollidedHorizontally = initialX_ != X_;
 		isCollidedVertically = initialY_ != Y_;
 		isCollided = isCollidedHorizontally || isCollidedVertically;
-		onGround = initialY_ != Y_ && Y_ < 0;
-		/* update fall state */
+		onGround = initialY_ != Y_ && initialY_ < 0;
+		updateFallState(Y_, onGround);
 		if (initialX_ != X_)
 		{
 			motionX = 0;
@@ -111,6 +116,27 @@ public abstract class Entity
 		if (initialY_ != Y_)
 		{
 			motionY = 0;
+		}
+	}
+	
+	protected void fall(float distance)
+	{
+		
+	}
+	
+	public void updateFallState(double y, boolean onGround_)
+	{
+		if (onGround_)
+		{
+			if (fallDistance > 0)
+			{
+				fall(fallDistance);
+				fallDistance = 0;
+			}
+		}
+		else if (y < 0)
+		{
+			fallDistance -= y;
 		}
 	}
 	

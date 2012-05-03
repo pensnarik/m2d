@@ -2,4 +2,8 @@
 
   02.05.2012
 
-1. Добавить в класс BoundingBox методы addCoord(deltaX, deltaY), grow() и пр.
+1. [+] Добавить в класс BoundingBox методы addCoord(deltaX, deltaY), grow() и пр.
+
+  03.05.2012
+  
+1. Добавить прыжки и гравитацию (для EntityLiving)

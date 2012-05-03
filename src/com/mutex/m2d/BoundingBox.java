@@ -97,7 +97,7 @@ public class BoundingBox
 		{
 			return offset;
 		}
-		if (offset > 0 && bb.maxX < minX)
+		if (offset > 0 && bb.maxX <= minX)
 		{
 			double delta1 = minX - bb.maxX;
 			if(delta1 < offset)
@@ -105,7 +105,7 @@ public class BoundingBox
 				offset = delta1;
 			}
 		}
-		if (offset < 0 && bb.minX > minX)
+		if (offset < 0 && bb.minX >= maxX)
 		{
 			double delta2 = maxX - bb.minX;
 			if (delta2 > offset)
@@ -122,7 +122,7 @@ public class BoundingBox
 		{
 			return offset;
 		}
-		if (offset > 0 && bb.maxY < minY)
+		if (offset > 0 && bb.maxY <= minY)
 		{
 			double delta1 = minY - bb.maxY;
 			if (delta1 < offset)
@@ -130,7 +130,7 @@ public class BoundingBox
 				offset = delta1;
 			}
 		}
-		if (offset < 0 && bb.minY > minY)
+		if (offset < 0 && bb.minY >= maxY)
 		{
 			double delta2 = maxY - bb.minY;
 			if(delta2 > offset)
@@ -143,7 +143,14 @@ public class BoundingBox
 	
 	public boolean intersectsWith(BoundingBox bb)
 	{
-		if (maxY < bb.minY || minY > bb.maxY || minX > bb.maxX || maxX < bb.minX) return false;
+		if (bb.maxX <= minX || bb.minX >= maxX)
+		{
+			return false;
+		}
+		if (bb.maxY <= minY || bb.minY >= maxY)
+		{
+			return false;
+		}
 		return true;
 	}
 	
@@ -157,5 +164,10 @@ public class BoundingBox
 		maxX += x_;
 		maxY += y_;
 		return this;
+	}
+	
+	public BoundingBox copy()
+	{
+		return getBoundingBoxFromPool(minX, minY, maxX, maxY);
 	}
 }

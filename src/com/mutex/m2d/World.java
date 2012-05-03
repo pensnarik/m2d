@@ -114,14 +114,18 @@ public class World {
 		return getBlockID(x_, y_) == 0;
 	}
 	
+	/*
+	 * Возвращает все bounding box'ы, пересекающиеся с boundingBox, за исключением сущности entity
+	 */
+	
 	public List<BoundingBox> getCollidingBoundingBoxes(Entity entity, BoundingBox boundingBox)
 	{
 		collidingBoundingBoxes.clear();
 		
 		int cubeMinX = MathHelper.floor_double(boundingBox.minX);
 		int cubeMinY = MathHelper.floor_double(boundingBox.minY);
-		int cubeMaxX = MathHelper.floor_double(boundingBox.maxX);
-		int cubeMaxY = MathHelper.floor_double(boundingBox.maxY);
+		int cubeMaxX = MathHelper.floor_double(boundingBox.maxX + 1);
+		int cubeMaxY = MathHelper.floor_double(boundingBox.maxY + 1);
 		
 		for (int x = cubeMinX; x < cubeMaxX; x++)
 		{
