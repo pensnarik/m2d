@@ -91,7 +91,7 @@ public abstract class Entity
 		//BoundingBox bb = boundingBox.copy();
 		List listBB = world.getCollidingBoundingBoxes(this, boundingBox.addCoord(X_, Y_));
 		/* debug */
-		Game.r.renderListAABB(listBB);
+		//Game.r.renderListAABB(listBB);
 		/* end debug */
 		for (int i = 0; i < listBB.size(); i++)
 		{

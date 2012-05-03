@@ -114,7 +114,7 @@ public class Renderer {
 		float x2 = (float) world.player.boundingBox.maxX;
 		float y2 = (float) world.player.boundingBox.maxY;
 		DrawTexturedBox(x1, y1, x2, y2, texturePlayer.getTextureID());
-		renderAABB(world.player.boundingBox);
+		//renderAABB(world.player.boundingBox);
 	}
 	
 	public void renderMap()
