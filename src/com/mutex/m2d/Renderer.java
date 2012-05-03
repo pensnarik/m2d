@@ -147,6 +147,7 @@ public class Renderer {
 					
 			}
 		}
+		renderChunkBorders();
 		glPopMatrix();
 	}
 	
@@ -242,7 +243,8 @@ public class Renderer {
 		Game.fr.renderString("Player Y:" + world.player.posY, -380, 240, 1);
 		Game.fr.renderString("fps: " + Game.lastFps, -380, 230, 1);
 		Game.fr.renderString("Memory: " + Game.memoryUsed + "MB", -380, 220, 1);
-		//Game.fr.renderString("SpeedY: " + Game.player.speedY, -380, 210, 1);
+		Game.fr.renderString("Age: " + Game.player.entityAge, -380, 210, 1);
+		Game.fr.renderString("Ticks: " + Game.ticksRun, -380, 200, 1);
 		//Game.fr.renderString("" + world.player.stopTimer, -370, 220, 1);
 		glPopMatrix();
 	}
@@ -302,5 +304,25 @@ public class Renderer {
 		{
 			renderAABB((BoundingBox) list.get(i));
 		}
+	}
+	
+	public void renderChunkBorders()
+	{
+		int gridSize = 6;
+		Screever screever = Screever.instance;
+		screever.startDrawing(GL_LINES);
+		glColor3f(0, 0, 0);
+		glLineWidth(2);
+		for (int x = -Chunk.width * gridSize; x <= Chunk.width * gridSize; x += Chunk.width )
+		{
+			for (int y = -Chunk.height * gridSize; y <= Chunk.height * gridSize; y += Chunk.height)
+			{
+				screever.addVertex(-Chunk.width * gridSize, y);
+				screever.addVertex( Chunk.width * gridSize, y);			
+			}
+			screever.addVertex(x, -Chunk.height * gridSize);
+			screever.addVertex(x,  Chunk.height * gridSize);
+		}
+		screever.draw();
 	}
 }

@@ -52,7 +52,7 @@ public class Timer
 		}
 		lastSyncSysClock = now;
 		double delta2 = (deltaHR - lastHRTime) * timeSyncAdjustment;
-		lastHRTime = delta2;
+		lastHRTime = deltaHR;
 		if (delta2 < 0)
 		{
 			delta2 = 0;

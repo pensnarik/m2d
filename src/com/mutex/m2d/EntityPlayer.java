@@ -26,4 +26,9 @@ public class EntityPlayer extends EntityLiving
 	{
 		super.moveEntityWithHeading(x, y);
 	}
+	
+	protected void fall(float distance)
+	{
+		super.fall(distance);
+	}
 }

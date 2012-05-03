@@ -42,6 +42,7 @@ public class World {
 		updateBlocks();
 		if (totalTicks++ % 1000 == 0)
 		{
+			System.out.println("Chunks loaded: " + chunkProvider.loadedChunks.getSize());
 			//System.out.println("blocks.size() = " + blocks.size());
 			//System.out.println("player.isCollided = " + player.isCollided);
 		}
@@ -67,7 +68,8 @@ public class World {
 	
 	public void updateEntities()
 	{
-		player.onUpdate();
+		Entity e = (Entity) player;
+		e.onUpdate();
 	}
 	
 	public void newBlock(Block block)
@@ -106,7 +108,7 @@ public class World {
 	
 	public int getBlockID(int x_, int y_)
 	{
-		return getChunkFromBlockCoords(x_ >> 6, y_ >> 6).getBlockID(x_ & 0x3f, y_ & 0x3f);
+		return getChunkFromChunkCoords(x_ >> 6, y_ >> 6).getBlockID(x_ & 0x3f, y_ & 0x3f);
 	}
 	
 	public boolean isAirBlock(int x_, int y_)

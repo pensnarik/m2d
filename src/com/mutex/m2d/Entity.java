@@ -26,6 +26,7 @@ public abstract class Entity
 	public final BoundingBox boundingBox = BoundingBox.getBoundingBox(0, 0, 0, 0);
 	
 	public boolean onGround;
+	public int entityAge;
 	
 	
 	public Entity(World world_)
@@ -40,6 +41,7 @@ public abstract class Entity
 		isCollidedVertically = false;
 		onGround = false;
 		fallDistance = 0;
+		entityAge = 0;
 	}
 	
 	protected void setWidth(float width_)
@@ -72,6 +74,7 @@ public abstract class Entity
 	
 	public void onUpdate()
 	{
+		entityAge++;
 		onEntityUpdate();			
 	}
 	

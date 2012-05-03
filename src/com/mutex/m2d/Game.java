@@ -21,7 +21,7 @@ public class Game
 	public static Renderer r;
 	public static FontRenderer fr;
 	public static GameSettings gameSettings = new GameSettings();
-	private static int ticksRun;
+	public static int ticksRun; /* private */
 	private static int fpsCounter;
 	public static int lastFps;
 	private static long currentTime;
@@ -64,7 +64,7 @@ public class Game
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		world = new World();
 		player = new EntityPlayerSP(world);
-		player.setPosition(0,  3);
+		player.setPosition(0,  1.01);
 		player.movementInput = new MovementInput(gameSettings);
 		world.player = player;
 		world.prepareVisibleChunks();
@@ -107,6 +107,7 @@ public class Game
 		{
 			ticksRun++;
 			runTick();
+			continue;
 		}
 		fpsCounter++;
 		while (System.currentTimeMillis() >= currentTime  + 1000)
