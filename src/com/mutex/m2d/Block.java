@@ -57,4 +57,12 @@ public class Block {
 	{
 		return BoundingBox.getBoundingBoxFromPool(minX + x, minY + y, maxX + x, maxY + y);
 	}
+	
+	public void dropBlockAsItem(World world, int x, int y)
+	{
+		double x_ = (double) (world.RandomGen.nextFloat() * 0.7) + (double)(1 - 0.7) * 0.5;
+		double y_ = (double) (world.RandomGen.nextFloat() * 0.7) + (double)(1 - 0.7) * 0.5;
+		EntityItem entityItem = new EntityItem(world, x + x_, y + y_);
+		world.addEntity(entityItem);
+	}
 }

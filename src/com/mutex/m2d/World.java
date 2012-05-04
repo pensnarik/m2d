@@ -11,6 +11,7 @@ public class World {
 	private int totalTicks;
 	public ArrayList<Block> blocks;
 	private ArrayList<BoundingBox> collidingBoundingBoxes;
+	public List listEntities;
 	
 	World()
 	{
@@ -19,6 +20,7 @@ public class World {
 		chunkProvider = new ChunkProvider(this);
 		blocks = new ArrayList<Block>();		
 		collidingBoundingBoxes = new ArrayList();
+		listEntities = new ArrayList();
 	}
 	
 	public void prepareVisibleChunks()
@@ -65,6 +67,11 @@ public class World {
 	{
 		Entity e = (Entity) player;
 		e.onUpdate();
+		for (int i = 0; i < listEntities.size(); i++)
+		{
+			Entity entity = (Entity) listEntities.get(i);
+			entity.onUpdate();
+		}
 	}
 	
 	public void newBlock(Block block)
@@ -111,6 +118,14 @@ public class World {
 		getChunkFromChunkCoords(x_ >> 6, y_ >> 6).setBlockID(x_ & 0x3f, y_ & 0x3f, blockID_);
 	}
 	
+	public void removeBlock(int x_, int y_)
+	{
+		if (isAirBlock(x_, y_)) return;
+		int blockID = getBlockID(x_, y_);
+		Block.blocksList[blockID].dropBlockAsItem(this, x_, y_);
+		setBlockID(x_, y_, 0);
+	}
+	
 	public boolean isAirBlock(int x_, int y_)
 	{
 		return getBlockID(x_, y_) == 0;
@@ -142,6 +157,18 @@ public class World {
 		}
 		
 		return collidingBoundingBoxes;
+	}
+	
+	public void addEntity(Entity entity)
+	{
+		listEntities.add(entity);
+		int chunkX = MathHelper.floor_double(entity.posX);
+		int chunkY = MathHelper.floor_double(entity.posY);
+		Chunk chunk = getChunkFromChunkCoords(chunkX, chunkY);
+		if (chunk != null)
+		{
+			chunk.addEntity(entity);
+		}
 	}
 	
 }

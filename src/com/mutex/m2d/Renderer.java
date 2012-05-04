@@ -26,6 +26,17 @@ public class Renderer {
 	public int selectedBlockY;
 	public boolean isBlockSelected;
 	
+	public void doRender()
+	{
+		renderSky();
+		renderMap();
+		//drawGrid();
+		renderOverlay();
+		renderPlayer();
+		//testVBO();
+		renderEntities();
+	}
+	
 	public void setSelectedBlock(int x, int y)
 	{
 		selectedBlockX = x;
@@ -326,5 +337,15 @@ public class Renderer {
 			screever.addVertex(x,  Chunk.height * gridSize);
 		}
 		screever.draw();
+	}
+	
+	public void renderEntities()
+	{
+		for (int i = 0; i < world.listEntities.size(); i++)
+		{
+			Entity e = (Entity)(world.listEntities.get(i));
+			glLineWidth(2);
+			renderAABB(e.boundingBox);
+		}
 	}
 }

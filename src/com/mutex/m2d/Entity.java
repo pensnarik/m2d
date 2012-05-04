@@ -57,6 +57,7 @@ public abstract class Entity
 	public void setSize(float width_, float height_)
 	{
 		width = width_; height = height_;
+		updateBB();
 	}
 	
 	protected final void updateBB()

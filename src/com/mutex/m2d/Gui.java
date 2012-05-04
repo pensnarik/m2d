@@ -20,7 +20,8 @@ public class Gui
 		int blockID = world.getBlockID(sceneX, sceneY);
 		if (blockID > 0)
 		{
-			world.setBlockID(sceneX, sceneY, 0);
+			//world.setBlockID(sceneX, sceneY, 0);
+			world.removeBlock(sceneX, sceneY);
 		}
 	}
 	

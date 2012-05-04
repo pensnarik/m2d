@@ -37,7 +37,7 @@ public class Game
 	
 	public Game()
 	{
-		timer = new Timer(40);
+		timer = new Timer(20);
 		ticksRun = 0;
 		fpsCounter = 0;
 		lastFps = 0;
@@ -168,12 +168,7 @@ public class Game
 	private static void render() {
 		glClear(GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 		glClear(GL_COLOR_BUFFER_BIT);
-		r.renderSky();
-		r.renderMap();
-		//r.drawGrid();
-		r.renderOverlay();
-		r.renderPlayer();
-		//r.testVBO();
+		r.doRender();
 	}	
 	
 	public static void cleanup() {
