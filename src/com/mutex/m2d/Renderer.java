@@ -22,10 +22,26 @@ public class Renderer {
 	public World world;
 	public final int scale = 2;
 	public final int blockSize = 16;
+	public int selectedBlockX;
+	public int selectedBlockY;
+	public boolean isBlockSelected;
+	
+	public void setSelectedBlock(int x, int y)
+	{
+		selectedBlockX = x;
+		selectedBlockY = y;
+		isBlockSelected = true;
+	}
+	
+	public void unselectBlock()
+	{
+		isBlockSelected = true;
+	}
 	
 	public Renderer(World world_)
 	{
 		world = world_;
+		isBlockSelected = false;
 	}
 	
 	public void init()
@@ -148,30 +164,26 @@ public class Renderer {
 			}
 		}
 		renderChunkBorders();
+		renderSelectedBlock();
 		glPopMatrix();
+	}
+	
+	public void renderSelectedBlock()
+	{
+		if (!isBlockSelected) return;
+		int blockID = world.getBlockID(selectedBlockX, selectedBlockY);
+		/* TODO: Change to getSelectionBoundingBoxFromPool */
+		if (blockID > 0)
+		{
+			BoundingBox boundingBox = Block.blocksList[blockID].getCollisionBoundingBoxFromPool(world, selectedBlockX, selectedBlockY);
+			renderAABB(boundingBox);
+		}
 	}
 	
 	public boolean isCoordInScreen(float x, float y)
 	{
 		return ((world.player.posX - x) > -13 & (world.player.posX - x) < 14 &
 				(world.player.posY - y) > -12 & (world.player.posY - y)  < 12);
-	}
-	
-	public void highlightBlock(Block b)
-	{
-		float bx = getScreenCoordX(b.x);
-		float by = getScreenCoordY(b.y);
-		glColor3f(0, 0.8f, 0);
-		glBegin(GL_LINES);
-			glVertex2f(bx - blockSize / 2 * scale, by - blockSize / 2 * scale);
-			glVertex2f(bx - blockSize / 2 * scale, by + blockSize / 2 * scale);
-			glVertex2f(bx - blockSize / 2 * scale, by + blockSize / 2 * scale);
-			glVertex2f(bx + blockSize / 2 * scale, by + blockSize / 2 * scale);
-			glVertex2f(bx + blockSize / 2 * scale, by + blockSize / 2 * scale);
-			glVertex2f(bx + blockSize / 2 * scale, by - blockSize / 2 * scale);
-			glVertex2f(bx + blockSize / 2 * scale, by - blockSize / 2 * scale);
-			glVertex2f(bx - blockSize / 2 * scale, by - blockSize / 2 * scale);			
-		glEnd();
 	}
 	
 	public void DrawTexturedBox(float x1, float y1, float x2, float y2, int textureID)
@@ -267,16 +279,6 @@ public class Renderer {
 	public double getSceneCoordY(int y_)
 	{
 		return (double) world.player.posY + (double) ((y_ - Game.DisplayHeight / 2) / ((double) (scale * blockSize)));	
-	}
-	
-	public boolean isBlockVisible(Block b)
-	{
-		int bx = getScreenCoordX(b.x);
-		int by = getScreenCoordY(b.y);
-		return  !(bx < - Game.DisplayWidth / 2 - blockSize * scale | 
-				  by < - Game.DisplayHeight / 2 - blockSize * scale | 
-				  bx > Game.DisplayWidth / 2 + blockSize * scale |
-				  by > Game.DisplayHeight / 2 + blockSize * scale);
 	}
 	
 	/*

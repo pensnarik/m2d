@@ -48,11 +48,6 @@ public class World {
 		}
 	}
 	
-	public void checkCollisions()
-	{
-		/* Moved to Entity.moveEntity() */
-	}
-	
 	public void updateBlocks()
 	{
 		for (int i = 0; i < chunkProvider.loadedChunks.getSize(); i++)		
@@ -109,6 +104,11 @@ public class World {
 	public int getBlockID(int x_, int y_)
 	{
 		return getChunkFromChunkCoords(x_ >> 6, y_ >> 6).getBlockID(x_ & 0x3f, y_ & 0x3f);
+	}
+	
+	public void setBlockID(int x_, int y_, int blockID_)
+	{
+		getChunkFromChunkCoords(x_ >> 6, y_ >> 6).setBlockID(x_ & 0x3f, y_ & 0x3f, blockID_);
 	}
 	
 	public boolean isAirBlock(int x_, int y_)

@@ -28,4 +28,9 @@ public class Chunk
 	{
 		return blocks[x_ + y_ * width];
 	}
+	
+	public void setBlockID(int x_, int y_, int blockID_)
+	{
+		blocks[x_ + y_ * width] = (byte) blockID_;
+	}
 }

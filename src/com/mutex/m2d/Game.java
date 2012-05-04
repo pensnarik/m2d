@@ -3,6 +3,7 @@ package com.mutex.m2d;
 import static org.lwjgl.opengl.GL11.*;
 
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
 import org.lwjgl.openal.AL;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
@@ -30,12 +31,13 @@ public class Game
 	public static long memoryUsed;
 	private static int secCounter;
 	public static EntityPlayerSP player;
+	public static Gui gui;
 	
 	private static Game thisGame = new Game();
 	
 	public Game()
 	{
-		timer = new Timer(20);
+		timer = new Timer(40);
 		ticksRun = 0;
 		fpsCounter = 0;
 		lastFps = 0;
@@ -71,7 +73,8 @@ public class Game
 		r = new Renderer(world);
 		fr = new FontRenderer(r);
 		r.init();
-		r.loadTextures();		
+		r.loadTextures();
+		gui = new Gui(world, r);
 	}
 	
 	public static void loop()
@@ -140,6 +143,19 @@ public class Game
 			}
 		} while (true);
 		world.tick();
+		gui.onTick();
+		do
+		{
+			if(!Mouse.next())
+			{
+				break;
+			}
+			if (Mouse.isButtonDown(0))
+			{
+				System.out.println("Button clicked");
+				Gui.onMouseClick(0, Mouse.getX(), Mouse.getY());
+			}
+		} while (true);
 	}
 	
 	private static void logic() {

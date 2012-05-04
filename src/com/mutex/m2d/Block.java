@@ -5,11 +5,8 @@ import java.util.*;
 
 public class Block {
 	public final int blockID;
-	public int x;
-	public int y;
 	public float width;
 	public float height;
-	private boolean highlighted;
 	public static Block[] blocksList;
 	
 	/* Относительные значения максимальных и минимальных координат */
@@ -30,10 +27,8 @@ public class Block {
 	
 	public Block(int blockID_)
 	{
-		//x = x_; y = y_;
 		blockID = blockID_;
 		width = height = 1;
-		highlighted = false;
 		blocksList[blockID_] = this;
 		setBlockBounds(0, 0, 1, 1);
 	}
@@ -41,16 +36,6 @@ public class Block {
 	public void tick()
 	{
 		
-	}
-	
-	public boolean isHightlighted()
-	{
-		return highlighted;
-	}
-	
-	public void setHighlighted(boolean flag)
-	{
-		highlighted = flag;
 	}
 	
 	public void setBlockBounds(double minX_, double minY_, double maxX_, double maxY_)
