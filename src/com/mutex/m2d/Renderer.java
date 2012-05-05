@@ -84,7 +84,10 @@ public class Renderer {
 	
 	public void renderSky()
 	{
+		setupOverlayRendering();
 		DrawTexturedBox(0 - Game.DisplayWidth / 2, 0 - Game.DisplayHeight / 2, Game.DisplayWidth / 2, Game.DisplayHeight / 2, textureSky.getTextureID());
+		//glBindTexture(GL_TEXTURE_2D, textureSky.getTextureID());
+		//renderTexturedRect(-400, -300, 0, 0, 256, 256);
 	}
 	
 	public void testVBO()

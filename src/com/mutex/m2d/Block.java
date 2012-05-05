@@ -62,7 +62,7 @@ public class Block {
 	{
 		double x_ = (double) (world.RandomGen.nextFloat() * 0.7) + (double)(1 - 0.7) * 0.5;
 		double y_ = (double) (world.RandomGen.nextFloat() * 0.7) + (double)(1 - 0.7) * 0.5;
-		EntityItem entityItem = new EntityItem(world, x + x_, y + y_);
+		EntityItem entityItem = new EntityItem(world, x + x_, y + y_, new ItemContainer(Item.itemBlock.itemID, 1));
 		world.addEntity(entityItem);
 	}
 }

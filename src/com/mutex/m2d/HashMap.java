@@ -7,13 +7,13 @@ public class HashMap
 	
 	public HashMap()
 	{
-		hashArray = new HashMapEntry[16];
+		hashArray = new HashMapEntry[256];
 		size = 0;
 	}
 	
 	public void add(int key, Object obj)
 	{
-		if (size == 16)
+		if (size == 256)
 		{
 			return;
 		}

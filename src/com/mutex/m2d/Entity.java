@@ -13,6 +13,8 @@ public abstract class Entity
 	
 	public double posX;
 	public double posY;
+	public int chunkX;
+	public int chunkY;
 	public double prevPosX;
 	public double prevPosY;
 	public double motionX;
@@ -30,6 +32,7 @@ public abstract class Entity
 	
 	public boolean onGround;
 	public int entityAge;
+	public boolean isDead;
 	
 	
 	public Entity(World world_)
@@ -45,6 +48,7 @@ public abstract class Entity
 		onGround = false;
 		fallDistance = 0;
 		entityAge = 0;
+		isDead = false;
 	}
 	
 	protected void setWidth(float width_)
@@ -150,5 +154,15 @@ public abstract class Entity
 	public void collidedWithBlock(Block b)
 	{
 		isCollided = true;
+	}
+	
+	public void onCollideWithPlayer(EntityPlayer entityPlayer)
+	{
+		
+	}
+	
+	public void setEntityDead()
+	{
+		isDead = true;
 	}
 }

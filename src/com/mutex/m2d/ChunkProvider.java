@@ -36,7 +36,7 @@ public class ChunkProvider
 			{
 				if (y_ >= 0)
 				{
-					if (world.RandomGen.nextInt(10) == 0)
+					if (world.RandomGen.nextInt(999) == 0)
 					{
 						blocks_[x + y*Chunk.height] = (byte) Block.blockDirt.blockID;
 					}
@@ -63,6 +63,7 @@ public class ChunkProvider
 	public int chunkCoordsToHash(int x_, int y_)
 	{
 		return x_ & 0xffff | (y_ & 0xffff) << 16;
+		//return x_ & 0xffffffffL | (y_ & 0xffffffffL) << 32;
 	}
 	
 }

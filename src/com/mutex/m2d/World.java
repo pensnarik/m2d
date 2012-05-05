@@ -42,7 +42,7 @@ public class World {
 	{
 		updateEntities();
 		updateBlocks();
-		if (totalTicks++ % 1000 == 0)
+		if (totalTicks++ % 20 == 0)
 		{
 			System.out.println("Chunks loaded: " + chunkProvider.loadedChunks.getSize());
 			//System.out.println("blocks.size() = " + blocks.size());
@@ -70,6 +70,12 @@ public class World {
 		for (int i = 0; i < listEntities.size(); i++)
 		{
 			Entity entity = (Entity) listEntities.get(i);
+			if (entity.isDead)
+			{
+				int chunkX = entity.chunkX;
+				int chunkY = entity.chunkY;
+				getChunkFromChunkCoords(chunkX, chunkY).removeEntity(entity);
+			}
 			entity.onUpdate();
 		}
 	}
@@ -162,8 +168,8 @@ public class World {
 	public void addEntity(Entity entity)
 	{
 		listEntities.add(entity);
-		int chunkX = MathHelper.floor_double(entity.posX);
-		int chunkY = MathHelper.floor_double(entity.posY);
+		int chunkX = MathHelper.floor_double(entity.posX) >> 6;
+		int chunkY = MathHelper.floor_double(entity.posY) >> 6;
 		Chunk chunk = getChunkFromChunkCoords(chunkX, chunkY);
 		if (chunk != null)
 		{
@@ -171,4 +177,14 @@ public class World {
 		}
 	}
 	
+	/*
+	 * Возвращает список сущностей, пересекающихся с bounding-box'ом boundingBox,
+	 * исключая саму сущность
+	 */
+	
+	public List getEntitiesWithinBoundingBoxEcxluding(Entity entity, BoundingBox boundingBox)
+	{
+		return new ArrayList();
+	}
+
 }

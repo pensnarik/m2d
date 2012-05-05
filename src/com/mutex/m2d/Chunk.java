@@ -40,5 +40,17 @@ public class Chunk
 	public void addEntity(Entity entity)
 	{
 		entities.add(entity);
+		entity.chunkX = x;
+		entity.chunkY = y;
+	}
+	
+	public void removeEntity(Entity entity)
+	{
+		entities.remove(entity);
+	}
+	
+	public void getEntitiesWithinBoundingBoxExcluding(Entity entity, BoundingBox boundingBox, List list)
+	{
+		
 	}
 }
