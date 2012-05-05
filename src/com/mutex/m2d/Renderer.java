@@ -19,6 +19,7 @@ public class Renderer {
 	public Texture texturePlayer;
 	public Texture textureSky;
 	public Texture textureGray;
+	public Texture textureInventory;
 	public World world;
 	public final int scale = 2;
 	public final int blockSize = 16;
@@ -31,10 +32,10 @@ public class Renderer {
 		renderSky();
 		renderMap();
 		//drawGrid();
-		renderOverlay();
 		renderPlayer();
 		//testVBO();
 		renderEntities();
+		renderOverlay();		
 	}
 	
 	public void setSelectedBlock(int x, int y)
@@ -68,11 +69,12 @@ public class Renderer {
 	public void loadTextures()
 	{
 		try {
-			textureDirt   = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("./res/dirt.png"));
-			textureStone  = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("./res/stone.png"));
-			texturePlayer = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("./res/player.png"));
-			textureSky    = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("./res/sky.png"));			
-			textureGray   = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("./res/gray.png"));			
+			textureDirt      = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("./res/dirt.png"));
+			textureStone     = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("./res/stone.png"));
+			texturePlayer    = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("./res/player.png"));
+			textureSky       = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("./res/sky.png"));			
+			textureGray      = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("./res/gray.png"));
+			textureInventory = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("./res/inventory.png"));
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);			
 		} catch (IOException e) {
@@ -152,7 +154,7 @@ public class Renderer {
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
 		//glTranslatef((float)world.player.posX, (float)world.player.posY, 0);
-		glPushMatrix();
+		//glPushMatrix();
 		for (int i = 0; i < world.chunkProvider.loadedChunks.getSize(); i++)
 		{
 			Chunk chunk = (Chunk) world.chunkProvider.loadedChunks.getValueByIndex(i);
@@ -176,7 +178,7 @@ public class Renderer {
 		}
 		renderChunkBorders();
 		renderSelectedBlock();
-		glPopMatrix();
+		//glPopMatrix();
 	}
 	
 	public void renderSelectedBlock()
@@ -223,7 +225,7 @@ public class Renderer {
 		glBindTexture(GL_TEXTURE_2D, textureID);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);			
-		glColor3f(1, 1, 0.5f);
+		glColor3f(0, 0, 0f);
 		glBegin(GL_QUADS);
 			glTexCoord2f(tx1, ty1); glVertex2f(x1, y1);
 			glTexCoord2f(tx2, ty1); glVertex2f(x2, y1);
@@ -241,24 +243,15 @@ public class Renderer {
 		glLoadIdentity();
 		glPushMatrix();
 		glColor3f(1, 0, 0);
-		glTranslatef(0, 0, 0);
-		
+		glTranslatef(0, 0, 0);		
 		Screever screever = Screever.instance;
 		
-		glEnable(GL_TEXTURE_2D);
 		glBindTexture(GL_TEXTURE_2D, textureGray.getTextureID());
-		
-		screever.startDrawingQuads();
-		screever.setColorOpaque(0, 0, 0);
-		screever.addVertexWithUV(-390, 190, 0, 1);
-		screever.addVertexWithUV(-140, 190, 1, 1);
-		screever.addVertexWithUV(-140, 300, 1, 0);
-		screever.addVertexWithUV(-390, 300, 0, 0);
-		screever.draw();
-		glDisable(GL_TEXTURE_2D);				
+		int w = Game.DisplayWidth; int h = Game.DisplayHeight;
 		
 		int x = Mouse.getX();
 		int y = Mouse.getY();
+		glColor3f(1, 1, 1);
 		Game.fr.renderString("m2d, version 0.0.1a", -380, 290, 1);
 		Game.fr.renderString("Mouse X:" + getSceneCoordX(x), -380, 270, 1);
 		Game.fr.renderString("Mouse Y:" + getSceneCoordY(y), -380, 260, 1);
@@ -269,7 +262,63 @@ public class Renderer {
 		Game.fr.renderString("Age: " + Game.player.entityAge, -380, 210, 1);
 		Game.fr.renderString("Ticks: " + Game.ticksRun, -380, 200, 1);
 		//Game.fr.renderString("" + world.player.stopTimer, -370, 220, 1);
+		setupOverlayRendering();
+		renderInventary(w, h);
 		glPopMatrix();
+	}
+	
+	public void renderInventary(int w, int h)
+	{
+		//glEnable(GL_BLEND);
+		//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glColor4f(1, 1, 1, 1);
+		glEnable(GL_TEXTURE_2D);
+		glBindTexture(GL_TEXTURE_2D, textureInventory.getTextureID());
+		renderTexturedRect(w/2 - 122, 10, 0, 0, 112, 46);
+		//drawPartOfTexture(100, 100, 116, 116, 0, 0, 1, 1, textureStone.getTextureID());
+		
+		glDisable(GL_TEXTURE_2D);
+	}
+	
+	public void setupOverlayRendering()
+	{
+		//glClear(256);
+		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
+		glOrtho(0, 400, 300, 0, -1, 1);
+		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();
+		//glTranslatef(0, 0, 0);
+	}
+	
+	public void renderTexturedRect(int x, int y, int tx1, int ty1, int tx2, int ty2)
+	{
+		/*
+		Screever screever = Screever.instance;
+		screever.startDrawingQuads();
+		float fScale = 1/256;
+		
+		screever.addVertexWithUV(x + 0,   y + ty2,  (float)(tx1 + 0)   * fScale, (float) (ty1 + ty2) * fScale);
+		screever.addVertexWithUV(x + tx2, y + ty2,  (float)(tx1 + tx2) * fScale, (float) (ty1 + ty2) * fScale);
+		screever.addVertexWithUV(x + tx2, y + 0, 	(float)(tx1 + tx2) * fScale, (float) (ty1 + 0) * fScale);
+		screever.addVertexWithUV(x + 0,   y + 0, 	(float)(tx1 + 0)   * fScale, (float) (ty1 + 0) * fScale);
+		
+		screever.draw();
+		*/
+		float fScale = (float) 0.00390625f;
+		
+		float tx1_ = (float) (tx1 * fScale);
+		float tx2_ = (float) ((tx2) * fScale);
+		float ty1_ = (float) ((ty1) * fScale);
+		float ty2_ = (float) ((ty2) * fScale);
+		
+		glColor4f(1, 1, 1, 1);
+		glBegin(GL_QUADS);
+		glTexCoord2f(tx1_, ty2_);  	glVertex2f(x + 0,   y + ty2 - ty1);
+		glTexCoord2f(tx2_, ty2_);   glVertex2f(x + tx2 - tx1, y + ty2 - ty1); 
+		glTexCoord2f(tx2_, ty1_); 	glVertex2f(x + tx2 - tx1, y + 0);	
+		glTexCoord2f(tx1_, ty1_);  	glVertex2f(x + 0,   y + 0);	
+		glEnd();
 	}
 	
 	public int getScreenCoordX(double x_)

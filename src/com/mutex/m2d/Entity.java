@@ -4,6 +4,9 @@ import java.util.*;
 
 public abstract class Entity
 {
+	/*
+	 * TODO: pushOutOfBlocks()
+	 */
 	private static int nextEntityID = 0;
 	public int entityID;
 	public World world;

@@ -52,6 +52,7 @@ public class Screever
 	{
 		rawBufferIndex = 0;
 		vertexCount = 0;
+		byteBuffer.clear();
 	}
 	
 	public void startDrawingQuads()
@@ -140,7 +141,7 @@ public class Screever
 		 */
 		rawBuffer[rawBufferIndex + 0] = Float.floatToRawIntBits((float)(x + xOffset));
 		rawBuffer[rawBufferIndex + 1] = Float.floatToRawIntBits((float)(y + yOffset));
-		rawBuffer[rawBufferIndex + 2] = Float.floatToRawIntBits(0.0f);
+		rawBuffer[rawBufferIndex + 2] = Float.floatToRawIntBits((float)(0));
 		
 		if(hasTexture)
 		{

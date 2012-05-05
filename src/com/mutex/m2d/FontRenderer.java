@@ -60,6 +60,7 @@ public class FontRenderer
 			float tx2 = (float)((col + 1) *(float)1.0f/16);
 			float ty1 = (float)(row*(float)1.0f/16);
 			float ty2 = (float)((row + 1) *(float)1.0f/16);
+			/* TODO: Change to renderTexturedRect() */
 			renderer.drawPartOfTexture(x + CharWidth * scale * i,
 					   y,
 					   x + CharWidth * scale * (i + 1),
