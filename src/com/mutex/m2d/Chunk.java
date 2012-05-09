@@ -51,6 +51,14 @@ public class Chunk
 	
 	public void getEntitiesWithinBoundingBoxExcluding(Entity entity, BoundingBox boundingBox, List list)
 	{
-		
+		for (int i = 0; i < entities.size(); i++)
+		{
+			Entity searchingEntity = (Entity) entities.get(i);
+			if (searchingEntity == entity || !searchingEntity.boundingBox.intersectsWith(boundingBox))
+			{
+				continue;
+			}
+			list.add(entity);			
+		}
 	}
 }

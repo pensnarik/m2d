@@ -12,6 +12,7 @@ public class World {
 	public ArrayList<Block> blocks;
 	private ArrayList<BoundingBox> collidingBoundingBoxes;
 	public List listEntities;
+	public List excludingEntityBoundingBoxes;
 	
 	World()
 	{
@@ -184,7 +185,9 @@ public class World {
 	
 	public List getEntitiesWithinBoundingBoxEcxluding(Entity entity, BoundingBox boundingBox)
 	{
-		return new ArrayList();
+		excludingEntityBoundingBoxes.clear();
+		//int 
+		return excludingEntityBoundingBoxes;
 	}
 
 }
