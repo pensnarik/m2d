@@ -47,6 +47,8 @@ public class Chunk
 	public void removeEntity(Entity entity)
 	{
 		entities.remove(entity);
+		/* TODO: Change render entities for using chunks, not global entity list */
+		world.listEntities.remove(entity);
 	}
 	
 	public void getEntitiesWithinBoundingBoxExcluding(Entity entity, BoundingBox boundingBox, List list)

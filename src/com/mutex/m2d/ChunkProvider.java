@@ -34,7 +34,7 @@ public class ChunkProvider
 		{
 			for(int y = 0; y < Chunk.height; y++)
 			{
-				if (y_ >= 0)
+				if (y_*64 + y >= 2)
 				{
 					if (world.RandomGen.nextInt(999) == 0)
 					{

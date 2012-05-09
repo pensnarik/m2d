@@ -24,7 +24,7 @@ public class EntityItem extends Entity
 	public void onCollideWithPlayer(EntityPlayer entityPlayer)
 	{
 		entityPlayer.inventory.addContainerToInventory(item);
-		if (item.itemsCount == 0)
+		if (true || item.itemsCount == 0)
 		{
 			setEntityDead();
 		}
