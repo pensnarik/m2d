@@ -58,7 +58,7 @@ public class Chunk
 			{
 				continue;
 			}
-			list.add(entity);			
+			list.add(searchingEntity);			
 		}
 	}
 }
