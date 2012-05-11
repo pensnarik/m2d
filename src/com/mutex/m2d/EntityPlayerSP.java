@@ -9,6 +9,7 @@ public class EntityPlayerSP extends EntityPlayer
 		super(world_);
 		maxSpeed = 0.2f;
 		height = 0.9f;
+		width = 0.8f;
 		isJumping = false;
 		updateBB();
 	}

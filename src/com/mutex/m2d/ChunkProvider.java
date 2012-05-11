@@ -36,7 +36,7 @@ public class ChunkProvider
 			{
 				if (y_*64 + y >= 2)
 				{
-					if (world.RandomGen.nextInt(999) == 0)
+					if (world.RandomGen.nextInt(10) == 0)
 					{
 						blocks_[x + y*Chunk.height] = (byte) Block.blockDirt.blockID;
 					}

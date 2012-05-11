@@ -187,15 +187,15 @@ public class World {
 	public List getEntitiesWithinBoundingBoxEcxluding(Entity entity, BoundingBox boundingBox)
 	{
 		excludingEntityBoundingBoxes.clear();
-		int x1 = MathHelper.floor_double(boundingBox.minX / 64);
-		int y1 = MathHelper.floor_double(boundingBox.minY / 64);
-		int x2 = MathHelper.floor_double(boundingBox.maxX / 64);
-		int y2 = MathHelper.floor_double(boundingBox.maxY / 64);
+		int x1 = MathHelper.floor_double(boundingBox.minX) >> 6;
+		int y1 = MathHelper.floor_double(boundingBox.minY) >> 6;
+		int x2 = MathHelper.floor_double(boundingBox.maxX) >> 6;
+		int y2 = MathHelper.floor_double(boundingBox.maxY) >> 6;
 		for (int i = x1; i <= x2; i++)
 		{
 			for (int j = y1; j <= y2; j++)
 			{
-				Chunk chunk = getChunkFromBlockCoords(i, j);
+				Chunk chunk = getChunkFromChunkCoords(i, j);
 				if (chunk != null)
 				{
 					chunk.getEntitiesWithinBoundingBoxExcluding(entity, boundingBox, excludingEntityBoundingBoxes);

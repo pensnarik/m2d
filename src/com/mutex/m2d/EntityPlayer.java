@@ -21,7 +21,7 @@ public class EntityPlayer extends EntityLiving
 	{
 		super.onLivingUpdate();
 		/* Check for collisions */
-		List list = world.getEntitiesWithinBoundingBoxEcxluding(this, boundingBox.expand(1, 1));
+		List list = world.getEntitiesWithinBoundingBoxEcxluding(this, boundingBox.expand(0.5f, 0.5f));
 		if (list != null)
 		{
 			for (int i = 0; i < list.size(); i++)
