@@ -17,8 +17,10 @@ public class EntityItem extends Entity
 	{
 		super.onUpdate();
 		motionY -= 0.04;
+		pushOutOfBlocks((boundingBox.minX + boundingBox.maxX)/2, (boundingBox.minY + boundingBox.maxY)/2);
 		moveEntity(motionX, motionY);
 		motionY *= 0.98;
+		motionX *= 0.98;
 	}
 	
 	public void onCollideWithPlayer(EntityPlayer entityPlayer)

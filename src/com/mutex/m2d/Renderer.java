@@ -26,6 +26,8 @@ public class Renderer {
 	public int selectedBlockX;
 	public int selectedBlockY;
 	public boolean isBlockSelected;
+	public double mouseSceneX = 0;
+	public double mouseSceneY = 0;
 	
 	public void doRender()
 	{
@@ -47,7 +49,7 @@ public class Renderer {
 	
 	public void unselectBlock()
 	{
-		isBlockSelected = true;
+		isBlockSelected = false;
 	}
 	
 	public Renderer(World world_)
@@ -186,13 +188,21 @@ public class Renderer {
 	
 	public void renderSelectedBlock()
 	{
-		if (!isBlockSelected) return;
-		int blockID = world.getBlockID(selectedBlockX, selectedBlockY);
-		/* TODO: Change to getSelectionBoundingBoxFromPool */
-		if (blockID > 0)
+		if (!isBlockSelected)
 		{
-			BoundingBox boundingBox = Block.blocksList[blockID].getCollisionBoundingBoxFromPool(world, selectedBlockX, selectedBlockY);
+			//if (mouseSceneX <= 0) return;
+			BoundingBox boundingBox = BoundingBox.getBoundingBox(mouseSceneX, mouseSceneY, mouseSceneX + 1, mouseSceneY + 1);
 			renderAABB(boundingBox);
+		}
+		else
+		{
+			int blockID = world.getBlockID(selectedBlockX, selectedBlockY);
+			/* TODO: Change to getSelectionBoundingBoxFromPool */
+			if (blockID > 0)
+			{
+				BoundingBox boundingBox = Block.blocksList[blockID].getCollisionBoundingBoxFromPool(world, selectedBlockX, selectedBlockY);
+				renderAABB(boundingBox);
+			}
 		}
 	}
 	
@@ -351,7 +361,8 @@ public class Renderer {
 	{
 		Screever screever = Screever.instance;
 		screever.startDrawing(GL_LINES);
-		glColor3f(0, 0, 1);
+		glColor4f(0.2f, 0.2f, 0.2f, 0.5f);
+		//glLineWidth(2.0f);
 		screever.addVertex(bb.minX, bb.minY);
 		screever.addVertex(bb.minX, bb.maxY);
 		screever.addVertex(bb.minX, bb.maxY);
@@ -396,8 +407,19 @@ public class Renderer {
 		for (int i = 0; i < world.listEntities.size(); i++)
 		{
 			Entity e = (Entity)(world.listEntities.get(i));
-			glLineWidth(2);
-			renderAABB(e.boundingBox);
+			if (e instanceof EntityItem)
+			{
+				EntityItem item = (EntityItem) e;
+				if (item.item.itemID == Item.itemBlock.itemID)
+				{
+					//ItemBlock itemBlock = (ItemBlock) item.item;
+					DrawTexturedBox((float)e.boundingBox.minX, (float)e.boundingBox.minY,
+									(float)e.boundingBox.maxX, (float)e.boundingBox.maxY,
+									textureDirt.getTextureID());
+					glLineWidth(1);			
+					renderAABB(e.boundingBox);
+				}
+			}
 		}
 	}
 }

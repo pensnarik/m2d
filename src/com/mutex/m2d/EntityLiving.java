@@ -74,7 +74,7 @@ public class EntityLiving extends Entity
 	
 	protected void jump()
 	{
-		motionY = 0.8;
+		motionY = 1.8;
 	}
 	
 	protected void fall(float distance)

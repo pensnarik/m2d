@@ -152,7 +152,7 @@ public class Game
 			}
 			if (Mouse.isButtonDown(0))
 			{
-				System.out.println("Button clicked");
+				//System.out.println("Button clicked");
 				Gui.onMouseClick(0, Mouse.getX(), Mouse.getY());
 			}
 		} while (true);

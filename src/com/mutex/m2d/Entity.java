@@ -170,8 +170,8 @@ public abstract class Entity
 	{
 		int x = MathHelper.floor_double(posX_);
 		int y = MathHelper.floor_double(posY_);
-		double deltaX = posX_ - x;
-		double deltaY = posY_ - y;
+		double deltaX = posX_ - (double) x;
+		double deltaY = posY_ - (double) y;
 		
 		if (world.isBlockNormalCube(x, y))
 		{
@@ -217,7 +217,7 @@ public abstract class Entity
 			if (dir == 3)
 			{
 				motionY = deltaMotion;
-			}					
+			}		
 			return true;
 		}
 		else
