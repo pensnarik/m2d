@@ -205,4 +205,9 @@ public class World {
 		return excludingEntityBoundingBoxes;
 	}
 
+	public boolean isBlockNormalCube(int x, int y)
+	{
+		Block block = Block.blocksList[getBlockID(x, y)];
+		return (block != null);
+	}
 }

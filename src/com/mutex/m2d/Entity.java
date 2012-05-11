@@ -165,4 +165,64 @@ public abstract class Entity
 	{
 		isDead = true;
 	}
+	
+	protected boolean pushOutOfBlocks(double posX_, double posY_)
+	{
+		int x = MathHelper.floor_double(posX_);
+		int y = MathHelper.floor_double(posY_);
+		double deltaX = posX_ - x;
+		double deltaY = posY_ - y;
+		
+		if (world.isBlockNormalCube(x, y))
+		{
+			boolean flagLeft   = !world.isBlockNormalCube(x - 1, y);
+			boolean flagRight  = !world.isBlockNormalCube(x + 1, y);
+			boolean flagTop    = !world.isBlockNormalCube(x, y + 1);
+			boolean flagBottom = !world.isBlockNormalCube(x, y - 1);
+			byte dir = -1;
+			double deltaMax = 9999;
+			if (flagLeft && deltaX < deltaMax)
+			{
+				deltaMax = deltaX;
+				dir = 0;
+			}
+			if (flagRight && 1 - deltaX < deltaMax)
+			{
+				deltaMax = 1 - deltaX;
+				dir = 1;
+			}
+			if (flagBottom && deltaY < deltaMax)
+			{
+				deltaMax = deltaY;
+				dir = 2;
+			}
+			if (flagTop && 1 - deltaY < deltaMax)
+			{
+				deltaMax = 1 - deltaY;
+				dir = 3;
+			}
+			float deltaMotion = world.RandomGen.nextFloat() * 0.2f + 0.1f;
+			if (dir == 0)
+			{
+				motionX = -deltaMotion;
+			}
+			if (dir == 1)
+			{
+				motionX = deltaMotion;
+			}
+			if (dir == 2)
+			{
+				motionY = -deltaMotion;				
+			}
+			if (dir == 3)
+			{
+				motionY = deltaMotion;
+			}					
+			return true;
+		}
+		else
+		{		
+			return false;
+		}
+	}
 }
