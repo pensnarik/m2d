@@ -23,9 +23,9 @@ public abstract class Inventory
 		{
 			if (itemContainers[i] == null)
 			{
-				itemContainers[i] = new ItemContainer(itemContainer.itemID, 10);
+				itemContainers[i] = new ItemContainer(itemContainer.itemID, itemContainer.subItemID, 10);
 				ItemContainer ic = itemContainers[i];
-				ic.itemsCount += itemContainer.itemsCount;				
+				ic.itemsCount += itemContainer.itemsCount;	
 				continue;
 			}
 			if (itemContainers[i].itemID == itemContainer.itemID)

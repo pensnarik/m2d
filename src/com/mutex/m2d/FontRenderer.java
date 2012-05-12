@@ -74,4 +74,35 @@ public class FontRenderer
 		
 		glPopMatrix();
 	}
+	
+	public void renderStringNew(String s, int x, int y, int scale)
+	{
+		int pos; int col; int row;
+		
+		for (int i = 0; i < s.length(); i++)
+		{
+			int c = (int) s.charAt(i);
+			if (c >= 0x30 && c <= 0x39) {
+				pos = c - 0x30;
+			} else if (c == 0x2e) {
+				pos = 80;
+			} else if (c == 0x2d) { /* '-' */
+				pos = 81;
+			} else if (c == 0x2b) { /* '+' */
+				pos = 82;
+			} else if (c >= 0x41 && c <= 0x5a) { /* 'A' - 'Z' */
+				pos = c - 0x41 + 17;
+			} else if (c >= 0x61 && c <= 0x7a) { /* 'a' - 'z' */
+				pos = c - 0x61 + 49;
+			} else if (c == 0x3a) {
+				pos = 10;
+			} else {
+				pos = -1;
+			}
+			if (pos < 0) continue;
+			col = pos % 16;
+			row = (int)(pos / 16);
+			/* TODO: render a letter */
+		}
+	}
 }
