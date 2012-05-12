@@ -20,6 +20,7 @@ public class Renderer {
 	public Texture textureSky;
 	public Texture textureGray;
 	public Texture textureInventory;
+	public Texture textureTerrain;
 	public World world;
 	public final int scale = 2;
 	public final int blockSize = 16;
@@ -77,6 +78,7 @@ public class Renderer {
 			textureSky       = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("./res/sky.png"));			
 			textureGray      = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("./res/gray.png"));
 			textureInventory = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("./res/inventory.png"));
+			textureTerrain   = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("./res/terrain.png"));
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);			
 		} catch (IOException e) {
@@ -289,6 +291,16 @@ public class Renderer {
 		glBindTexture(GL_TEXTURE_2D, textureInventory.getTextureID());
 		renderTexturedRect(w/2 - 122, 10, 0, 0, 112, 46);
 		//drawPartOfTexture(100, 100, 116, 116, 0, 0, 1, 1, textureStone.getTextureID());
+		for (int i = 0; i < /*world.player.inventory.getNumContainers()*/ 5; i++)
+		{
+			ItemContainer item = world.player.inventory.itemContainers[i];
+			if (item != null)
+			{
+				glBindTexture(GL_TEXTURE_2D, textureTerrain.getTextureID());
+				renderTexturedRect(w/2 - 122 + 4 + i*22, 14, 16, 0, 32, 16);
+				Game.fr.renderString("" + item.itemsCount, w/2 - 122 + 12 + i*22, 30, 1);
+			}
+		}
 		
 		glDisable(GL_TEXTURE_2D);
 	}
@@ -412,10 +424,18 @@ public class Renderer {
 				EntityItem item = (EntityItem) e;
 				if (item.item.itemID == Item.itemBlock.itemID)
 				{
-					//ItemBlock itemBlock = (ItemBlock) item.item;
+					int idTexture;
+					if (item.item.subItemID == Block.blockDirt.blockID)
+					{
+						idTexture = textureDirt.getTextureID();
+					}
+					else
+					{
+						idTexture = textureStone.getTextureID();						
+					}
 					DrawTexturedBox((float)e.boundingBox.minX, (float)e.boundingBox.minY,
 									(float)e.boundingBox.maxX, (float)e.boundingBox.maxY,
-									textureDirt.getTextureID());
+									idTexture);
 					glLineWidth(1);			
 					renderAABB(e.boundingBox);
 				}

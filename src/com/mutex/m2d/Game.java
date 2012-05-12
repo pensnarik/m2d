@@ -86,7 +86,7 @@ public class Game
 				running = false;
 			} else if (Display.isActive()) {
 				run();
-				Display.sync(FRAMERATE);
+				//Display.sync(FRAMERATE);
 			} else {
 				try {
 					Thread.sleep(1000);
